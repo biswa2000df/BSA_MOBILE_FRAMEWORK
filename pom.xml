@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>BISWAJIT_SCRIPTLESS_AUTOMATION_MOBILE_FRAMEWORK</groupId>
+	<artifactId>BSA_MOBILE</artifactId>
+	<version>_HYBRID_FRAMEWORK</version>
+	<packaging>jar</packaging>
+	<name>BISWAJIT_SCRIPTLESS_AUTOMATION_MOBILE_FRAMEWORK</name>
+	<description>This is a hybrid framework which are used to no need to write the script to perform mobile testing.</description>
+
+
+	<dependencies>
+
+			<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>3.141.59</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.appium</groupId>
+			<artifactId>java-client</artifactId>
+			<version>7.6.0</version>
+		</dependency>
+
+
+		
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.10.0</version>
+		</dependency>
+
+
+	
+
+		
+		<!-- https://mvnrepository.com/artifact/com.codoid.products/fillo -->
+		<dependency>
+			<groupId>com.codoid.products</groupId>
+			<artifactId>fillo</artifactId>
+			<version>1.18</version>
+		</dependency>
+		
+		<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
+
+	</dependencies>
+
+
+</project>
