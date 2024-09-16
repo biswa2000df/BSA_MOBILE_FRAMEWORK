@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -52,6 +53,8 @@ public class Android_IOS_Driver {
 
 			url = new URL(BrowserStackUrl);
 			driver = new AndroidDriver<WebElement>(url, capabilities);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
+
 
 		} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
@@ -77,6 +80,8 @@ public class Android_IOS_Driver {
 
 			url = new URL(BrowserStackUrl);
 			driver = new IOSDriver<WebElement>(url, capabilities);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
+
 		}
 	}
 
@@ -110,6 +115,8 @@ public class Android_IOS_Driver {
 
 			url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
 			driver = new AndroidDriver<WebElement>(url, capabilities);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
+
 
 		} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
@@ -133,6 +140,7 @@ public class Android_IOS_Driver {
 
 			url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
 			driver = new IOSDriver<WebElement>(url, capabilities);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
 		}
 
 	}

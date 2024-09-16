@@ -11,20 +11,20 @@ import com.codoid.products.fillo.Recordset;
 
 public class MobileConfiguration {
 
-	public static String Si_No = null;
-	public static String Process = null;
-	public static String App_PackageName = null;
-	public static String App_PackageActivityName = null;
-	public static String DeviceName = null;
-	public static String DevicePlatform = null;
-	public static String DevicePlatformVersion = null;
-	public static String AppReset = null;
-	public static String Pre_InstalledApp = null;
-	public static String AppPath = null;
-	public static String AppiumPort = null;
-	public static String TestingPlatform = null;
-	public static String UserName = null;
-	public static String AccessKey = null;
+	public static String Si_No ;
+	public static String Process ;
+	public static String App_PackageName ;
+	public static String App_PackageActivityName ;
+	public static String DeviceName ;
+	public static String DevicePlatform ;
+	public static String DevicePlatformVersion ;
+	public static String AppReset ;
+	public static String Pre_InstalledApp ;
+	public static String AppPath ;
+	public static String AppiumPort ;
+	public static String TestingPlatform ;
+	public static String UserName ;
+	public static String AccessKey ;
 
 	// FilePath
 	public static String mainControllerFilePath;
@@ -97,8 +97,8 @@ public class MobileConfiguration {
 									&& !DevicePlatformVersion.isEmpty() && AppReset != null && !AppReset.isEmpty()
 									&& Pre_InstalledApp != null && !Pre_InstalledApp.isEmpty()) {
 								
-								System.out.println(ConnectToMainController.ExecutionType);
-								Android_IOS_Driver.InitialisationDriverRemote();
+								System.out.println("ConnectToMainController.ExecutionType===================>" + ConnectToMainController.ExecutionType);
+//								Android_IOS_Driver.InitialisationDriverRemote();
 								
 							}
 						} else if (ConnectToMainController.ExecutionType.equalsIgnoreCase("local")) {
@@ -114,7 +114,9 @@ public class MobileConfiguration {
 								
 								
 								try {
-									Android_IOS_Driver.InitialisationDriverLocal();
+//									Android_IOS_Driver.InitialisationDriverLocal();
+									System.out.println("ConnectToMainController.ExecutionType====================> " + ConnectToMainController.ExecutionType);
+									ConnectToDataSheet.extractTestData();
 								}catch(Exception e) {
 									System.out.println(e);
 								}
