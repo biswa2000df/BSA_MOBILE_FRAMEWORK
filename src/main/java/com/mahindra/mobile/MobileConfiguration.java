@@ -11,20 +11,21 @@ import com.codoid.products.fillo.Recordset;
 
 public class MobileConfiguration {
 
-	public static String Si_No ;
-	public static String Process ;
-	public static String App_PackageName ;
-	public static String App_PackageActivityName ;
-	public static String DeviceName ;
-	public static String DevicePlatform ;
-	public static String DevicePlatformVersion ;
-	public static String AppReset ;
-	public static String Pre_InstalledApp ;
-	public static String AppPath ;
-	public static String AppiumPort ;
-	public static String TestingPlatform ;
-	public static String UserName ;
-	public static String AccessKey ;
+	public static String Si_No;
+	public static String Process;
+	public static String App_PackageName;
+	public static String App_PackageActivityName;
+	public static String DeviceName;
+	public static String DevicePlatform;
+	public static String DevicePlatformVersion;
+	public static String AppReset;
+	public static String Pre_InstalledApp;
+	public static String AppPath;
+	public static String AppiumPort;
+	public static String TestingPlatform;
+	public static String UserName;
+	public static String AccessKey;
+
 
 	// FilePath
 	public static String mainControllerFilePath;
@@ -33,15 +34,14 @@ public class MobileConfiguration {
 
 		mainControllerFilePath = System.getProperty("user.dir") + File.separator + "MainController.xlsx";
 		File mainControllerFile = new File(mainControllerFilePath);
-		
 
 		try {
 			mainControllerFile.exists();
 			Fillo fillo = new Fillo();
 			Connection connection = fillo.getConnection(mainControllerFilePath);
 
-//			String query = "SELECT * FROM MOBILE_CONFIGURATION";
-			String queryForProcessName = "SELECT * FROM MOBILE_CONFIGURATION Where RunStatus='Y' and Process = '" + ConnectToMainController.Process + "'";
+			String queryForProcessName = "SELECT * FROM MOBILE_CONFIGURATION Where RunStatus='Y' and Process = '"
+					+ ConnectToMainController.Process + "'";
 			Recordset recordset = null;
 
 			try {
@@ -84,47 +84,9 @@ public class MobileConfiguration {
 						TestingPlatform = (String) row.get(12);
 						UserName = (String) row.get(13);
 						AccessKey = (String) row.get(14);
+					
 
-						if (ConnectToMainController.ExecutionType.equalsIgnoreCase("Remote")) {
-							
-							if (Si_No != null && !Si_No.isEmpty() && TestingPlatform != null
-									&& !TestingPlatform.isEmpty() && UserName != null && !UserName.isEmpty()
-									&& AccessKey != null && !AccessKey.isEmpty() && Process != null
-									&& !Process.isEmpty() && App_PackageName != null && !App_PackageName.isEmpty()
-									&& App_PackageActivityName != null && !App_PackageActivityName.isEmpty()
-									&& DeviceName != null && !DeviceName.isEmpty() && DevicePlatform != null
-									&& !DevicePlatform.isEmpty() && DevicePlatformVersion != null
-									&& !DevicePlatformVersion.isEmpty() && AppReset != null && !AppReset.isEmpty()
-									&& Pre_InstalledApp != null && !Pre_InstalledApp.isEmpty()) {
-								
-								System.out.println("ConnectToMainController.ExecutionType===================>" + ConnectToMainController.ExecutionType);
-//								Android_IOS_Driver.InitialisationDriverRemote();
-								
-							}
-						} else if (ConnectToMainController.ExecutionType.equalsIgnoreCase("local")) {
-							
-							if (Si_No != null && !Si_No.isEmpty() && AppiumPort != null
-									&& !AppiumPort.isEmpty()  && Process != null
-									&& !Process.isEmpty() && App_PackageName != null && !App_PackageName.isEmpty()
-									&& App_PackageActivityName != null && !App_PackageActivityName.isEmpty()
-									&& DeviceName != null && !DeviceName.isEmpty() && DevicePlatform != null
-									&& !DevicePlatform.isEmpty() && DevicePlatformVersion != null
-									&& !DevicePlatformVersion.isEmpty() && AppReset != null && !AppReset.isEmpty()
-									&& Pre_InstalledApp != null && !Pre_InstalledApp.isEmpty()) {
-								
-								
-								try {
-//									Android_IOS_Driver.InitialisationDriverLocal();
-									System.out.println("ConnectToMainController.ExecutionType====================> " + ConnectToMainController.ExecutionType);
-									ConnectToDataSheet.extractTestData();
-								}catch(Exception e) {
-									System.out.println(e);
-								}
-								
-								
-							}
-						}
-
+						
 					}
 				}
 			} catch (Exception e) {

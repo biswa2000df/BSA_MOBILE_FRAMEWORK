@@ -28,9 +28,9 @@ public class ConnectToMainController {
 	public static String mainControllerFilePath;
 	public static String dataSheetFilePath;
 
-//	public static void mainControllerSheet() {
+	public static void mainControllerSheet() {
 
-	public static void main(String[] args) {
+//	public static void main(String[] args) {
 
 		mainControllerFilePath = System.getProperty("user.dir") + File.separator + "MainController.xlsx";
 		File mainControllerFile = new File(mainControllerFilePath);

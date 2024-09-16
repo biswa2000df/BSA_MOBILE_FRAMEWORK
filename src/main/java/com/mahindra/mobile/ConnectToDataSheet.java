@@ -1,14 +1,18 @@
 package com.mahindra.mobile;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.openqa.selenium.WebElement;
 
 import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
 
-public class ConnectToDataSheet {
+
+public class ConnectToDataSheet extends Android_IOS_Driver{
 
 	public static String Si_No;
 	public static String Module;
@@ -31,8 +35,15 @@ public class ConnectToDataSheet {
 	public static String ApplicationName;
 	public static String Proceed;
 	public static String Verify;
+	
+	
+	public static WebElement webElement;
+	public static List<WebElement> webElements;
+
+	public static String dataSheet2Value;
 
 	static LocatorManager locatorManager;
+	static Function function;
 
 	public static void extractAllData() throws Exception {
 
@@ -116,14 +127,16 @@ public class ConnectToDataSheet {
 						System.out.println("PropertyName      ====================> " + PropertyName);
 						System.out.println("PropertyValue     ====================> " + PropertyValue);
 						System.out.println("Datafield         ====================> " + DataField);
-						System.out.println("ActionType        ====================> " + Action);
+						System.out.println("Action            ====================> " + Action);
 
-						
+//						MobileConfiguration.mobileConfigurationSheet();
 
-						MobileConfiguration.mobileConfigurationSheet();
-						
-						locatorManager.mapToLocator();
-						
+						try {
+							locatorManager.mapToLocator();
+						} catch (Exception e) {
+							System.err.print(e);
+						}
+
 					}
 					if (i == rowsList.size()) {
 
@@ -146,101 +159,57 @@ public class ConnectToDataSheet {
 	}
 
 	public static void extractTestData() throws Exception {
-		
-		Fillo fillo = new Fillo();
+
+		function = new Function();
+
+		/*Fillo fillo = new Fillo();
 		Connection conn = fillo.getConnection(ConnectToMainController.dataSheetFilePath);
 		Recordset recordset = null;
-		String query = "SELECT * FROM Sheet2";
-		String queryForModule = "SELECT * FROM Sheet2 WHERE RUNSTATUS='Y' and ApplicationName='" + Module + "'";
+		String queryForModule = "SELECT * FROM Sheet2";////// WHERE RUNSTATUS='Y' and ApplicationName='" + Module + "'";
+
 		try {
-			recordset = conn.executeQuery(query);
+			recordset = conn.executeQuery(queryForModule);// here to check the runstatus and module
+
 			if (recordset != null) {
 
-				List<String> actualColumnName = recordset.getFieldNames();
-				List<String> exceptedColumnName = new ArrayList<String>();
-				exceptedColumnName.addAll(Arrays.asList("Si_No", "RunStatus", "ApplicationName", "Proceed", "Verify"));
+				
+				  dataSheetSi_No = recordset.getField("Si_No"); ApplicationName =
+				  recordset.getField("ApplicationName"); Proceed =
+				  recordset.getField("Proceed"); Verify = recordset.getField("Verify");
+				 
 
-				List<String> notPresentColumn = new ArrayList<String>();
-
-				Boolean allColumnPresent = true;
-
-				for (String columnName : actualColumnName) {
-					if (!exceptedColumnName.contains(columnName)) {
-						notPresentColumn.add(columnName);
-						allColumnPresent = false;
-					}
-				}
-
-				if (allColumnPresent) {
-//					System.out.println("All the columnName are present");
-					recordset.close();
-				} else {
-					System.out.println("SORRY!!! '" + notPresentColumn
-							+ "' these columns are not present or spelling missmatch or upperLowercase validate ");
-					System.exit(0);
-				}
+				dataSheet2Value = recordset.getField(DataField);
+				System.out.println(dataSheet2Value);
+				function.ActionRDS();
 			}
-			try {
-				recordset = conn.executeQuery(queryForModule);// here to check the runstatus and module
-				if (recordset != null) {
+			recordset.close();
 
-					List<Object> rowsList = new ArrayList<Object>();
-
-					while (recordset.next()) {
-						List<String> columns = recordset.getFieldNames();
-						List<Object> rowValues = new ArrayList<Object>();
-						for (String column : columns) {
-							rowValues.add(recordset.getField(column));
-						}
-						rowsList.add(rowValues);
-					}
-					
-					if(recordset != null) {
-						recordset.close();
-					}
-					
-					for (int i = 0; i < rowsList.size(); i++) {
-
-						List<Object> row = (List<Object>) rowsList.get(i);
-
-						dataSheetSi_No = (String) row.get(0);
-						ApplicationName = (String) row.get(2);
-						Proceed = (String) row.get(3);
-						Verify = (String) row.get(4);
-						
-						if (dataSheetSi_No != null && !dataSheetSi_No.isEmpty() && ApplicationName != null
-								&& !ApplicationName.isEmpty() ) {
-							
-							System.out.println("SI_No             ====================> " + dataSheetSi_No);
-							System.out.println("ApplicationName        ====================> " + ApplicationName);
-							System.out.println("Proceed      ====================> " + Proceed);
-							System.out.println("Verify     ====================> " + Verify);
-							
-							///here i write the query to get the sheet to value and call the function class
-							
-							
-						} else {
-							System.out.println("Please filled the data MainController DataSheet !!!");
-							System.exit(0);
-						}
-						
-						
-
-					}
-					
-				}
-//					System.out.println("'DataSheet' sheet are present And RunStatus are 'Y' and modul name also same");
-				recordset.close();
-
-			} catch (Exception e) {
-				System.out.println("SORRY!!! 'DataSheet' sheet are present BUT problem on ApplicationName column value");
-				System.exit(0);
-			}
 		} catch (Exception e) {
-			System.out.println("SORRY!!! 'DataSheet' sheet are present or not or SheetName is Missmatch ");
-			System.exit(0);
-		}
+			System.out.println("before catch block " + dataSheet2Value);
+			function.ActionRDS();
 
+		}*/
+		
+		
+
+		if (DataField != null && !DataField.isEmpty()) {
+			Fillo fillo = new Fillo();
+			Connection conn = fillo.getConnection(System.getProperty("user.dir") + File.separator + "DataSheet"
+					+ File.separator + ConnectToMainController.TestDataSheet);
+			String query = "SELECT * FROM Sheet2";
+			Recordset recordset = conn.executeQuery(query);
+
+			while (recordset.next()) {
+				dataSheet2Value = recordset.getField(DataField);
+				System.out.println("DataFiels For Sheet2==================================================== "
+						+ dataSheet2Value + "\n");
+//				ActionClass.actrds();
+			}
+
+			function.ActionRDS();
+		}else {
+			function.ActionRDS();
+		}
 	}
 
 }

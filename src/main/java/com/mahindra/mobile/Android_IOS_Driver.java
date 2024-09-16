@@ -21,10 +21,10 @@ public class Android_IOS_Driver {
 	static Map<String, Object> browserstackOptions;
 
 	public static void InitialisationDriverRemote() throws Exception {
-		
+
 		final String BrowserStackUrl = "https://" + MobileConfiguration.UserName + ":" + MobileConfiguration.AccessKey
 				+ "@hub-cloud.browserstack.com/wd/hub";
-		
+
 		browserstackOptions = new HashMap<String, Object>();
 
 		capabilities = new DesiredCapabilities();
@@ -53,8 +53,8 @@ public class Android_IOS_Driver {
 
 			url = new URL(BrowserStackUrl);
 			driver = new AndroidDriver<WebElement>(url, capabilities);
-			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
-
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
+					TimeUnit.SECONDS);
 
 		} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
@@ -80,15 +80,12 @@ public class Android_IOS_Driver {
 
 			url = new URL(BrowserStackUrl);
 			driver = new IOSDriver<WebElement>(url, capabilities);
-			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
+					TimeUnit.SECONDS);
 
 		}
 	}
 
-	
-
-	
-	
 	public static void InitialisationDriverLocal() throws Exception {
 
 		capabilities = new DesiredCapabilities();
@@ -115,8 +112,8 @@ public class Android_IOS_Driver {
 
 			url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
 			driver = new AndroidDriver<WebElement>(url, capabilities);
-			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
-
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
+					TimeUnit.SECONDS);
 
 		} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
@@ -140,7 +137,8 @@ public class Android_IOS_Driver {
 
 			url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
 			driver = new IOSDriver<WebElement>(url, capabilities);
-			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
+					TimeUnit.SECONDS);
 		}
 
 	}
