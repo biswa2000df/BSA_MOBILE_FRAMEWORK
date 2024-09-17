@@ -1,0 +1,41 @@
+first required the appium application document
+ {
+  "platformName": "Android",
+  "platformVersion": "11",
+  "deviceName": "d4a4d1d2",
+  "appPackage": "com.microsoft.bing",
+  "appActivity": "com.microsoft.sapphire.app.main.SapphireMainActivity"
+}
+
+{
+  "platformName": "Android",
+  "platformVersion": "11",
+  "deviceName": "d4a4d1d2",
+  "appPackage": "com.miui.calculator",
+  "appActivity": "com.miui.calculator.cal.CalculatorActivity",
+  "fullReset": false,
+  "noReset": true
+}
+
+ANDROID_HOME = C:\Users\biswa\AppData\Local\Android\Sdk
+
+JAVA_HOME = C:\Program Files\Java\jdk-17.0.3.1
+
+
+if the appium in not working try this because it is install a applicatiion to ur mobile device
+
+When nothing is working then use the two command
+adb uninstall io.appium.uiautomator2.server
+adb uninstall io.appium.uiautomator2.server.test
+
+
+To connect wireless device use command
+adb devices
+adb tcpip 5555
+adb kill-server
+adb tcpip 5555 
+after that to remove the cable and run the down command
+adb connect 192.168.4.103:5555== that is the ip of the mobile
+
+*When this error thrown = Exception in thread "main" org.openqa.selenium.SessionNotCreatedException: Unable to create a new remote session. Please check the server log for more details. Original error: The requested resource could not be found, or a request was received using an HTTP method that is not supported by the mapped resource (WARNING: The server did not provide any stacktrace information)
+then clear phone storage or logs or temporary filec

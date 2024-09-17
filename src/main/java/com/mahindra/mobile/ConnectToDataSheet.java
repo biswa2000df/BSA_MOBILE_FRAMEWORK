@@ -11,8 +11,7 @@ import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
 
-
-public class ConnectToDataSheet extends Android_IOS_Driver{
+public class ConnectToDataSheet extends Android_IOS_Driver {
 
 	public static String Si_No;
 	public static String Module;
@@ -35,20 +34,30 @@ public class ConnectToDataSheet extends Android_IOS_Driver{
 	public static String ApplicationName;
 	public static String Proceed;
 	public static String Verify;
-	
-	
+
 	public static WebElement webElement;
 	public static List<WebElement> webElements;
 
 	public static String dataSheet2Value;
+	public static String sTest_Case = null;
+
+	public static String status; // here status are mention only for write the csv file status 'pass' or 'fail'
 
 	static LocatorManager locatorManager;
 	static Function function;
+	static UtilsActivity utilsActivity;
+	
+	public static int totalTest, pass, fail;
+	public static int totalValidations, passValidations, failedValidations;
 
 	public static void extractAllData() throws Exception {
+		
+		totalTest = 0; pass = 0; fail = 0;
+		totalValidations = 0; passValidations = 0; failedValidations = 0;
 
 		// create object
 		locatorManager = new LocatorManager();
+		utilsActivity = new UtilsActivity();
 
 		Fillo fillo = new Fillo();
 		Connection conn = fillo.getConnection(ConnectToMainController.dataSheetFilePath);
@@ -101,6 +110,8 @@ public class ConnectToDataSheet extends Android_IOS_Driver{
 						rowsList.add(rowValues);
 					}
 
+					utilsActivity.extentReport(); // call the extent report method
+
 					int i;
 					for (i = 0; i < rowsList.size(); i++) {
 
@@ -129,22 +140,39 @@ public class ConnectToDataSheet extends Android_IOS_Driver{
 						System.out.println("Datafield         ====================> " + DataField);
 						System.out.println("Action            ====================> " + Action);
 
-//						MobileConfiguration.mobileConfigurationSheet();
-
 						try {
-							locatorManager.mapToLocator();
+							
+							if (!TestCaseID.equals(sTest_Case)) { // here we created the report to the testcase id
+								utilsActivity.testCaseCreate();
+							}
+							sTest_Case = TestCaseID;
+							totalTest++;
+							
+							if(Action.equalsIgnoreCase("CheckVisibility")) {
+								totalValidations++;
+							}
+							
+							locatorManager.mapToLocator(); 
+							
+							pass = totalTest - fail;
+							passValidations = totalValidations - failedValidations;
+							
+							System.out.println("TotalValidation = " + totalValidations + " PassedValidations = " + passValidations + " FailedValidations = " + failedValidations);
+							System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
+							
 						} catch (Exception e) {
-							System.err.print(e);
+							e.printStackTrace();
 						}
 
 					}
 					if (i == rowsList.size()) {
 
 						System.out.println("\n");
+						System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
+
 						System.out.println("********************  Successfully Completed  ********************" + "\n");
 					}
 				}
-//					System.out.println("'DataSheet' sheet are present And RunStatus are 'Y' and modul name also same");
 				recordset.close();
 
 			} catch (Exception e) {
@@ -154,6 +182,8 @@ public class ConnectToDataSheet extends Android_IOS_Driver{
 		} catch (Exception e) {
 			System.out.println("SORRY!!! 'DataSheet' sheet are present or not or SheetName is Missmatch ");
 			System.exit(0);
+		} finally {
+			utilsActivity.ExtentFlush();
 		}
 
 	}
@@ -162,53 +192,41 @@ public class ConnectToDataSheet extends Android_IOS_Driver{
 
 		function = new Function();
 
-		/*Fillo fillo = new Fillo();
-		Connection conn = fillo.getConnection(ConnectToMainController.dataSheetFilePath);
-		Recordset recordset = null;
-		String queryForModule = "SELECT * FROM Sheet2";////// WHERE RUNSTATUS='Y' and ApplicationName='" + Module + "'";
-
-		try {
-			recordset = conn.executeQuery(queryForModule);// here to check the runstatus and module
-
-			if (recordset != null) {
-
-				
-				  dataSheetSi_No = recordset.getField("Si_No"); ApplicationName =
-				  recordset.getField("ApplicationName"); Proceed =
-				  recordset.getField("Proceed"); Verify = recordset.getField("Verify");
-				 
-
-				dataSheet2Value = recordset.getField(DataField);
-				System.out.println(dataSheet2Value);
-				function.ActionRDS();
-			}
-			recordset.close();
-
-		} catch (Exception e) {
-			System.out.println("before catch block " + dataSheet2Value);
-			function.ActionRDS();
-
-		}*/
-		
-		
-
 		if (DataField != null && !DataField.isEmpty()) {
 			Fillo fillo = new Fillo();
 			Connection conn = fillo.getConnection(System.getProperty("user.dir") + File.separator + "DataSheet"
 					+ File.separator + ConnectToMainController.TestDataSheet);
-			String query = "SELECT * FROM Sheet2";
-			Recordset recordset = conn.executeQuery(query);
+			String query = "SELECT * FROM Sheet2 WHERE RUNSTATUS='Y' and ApplicationName='" + Module + "'";
+			Recordset recordset = null;
 
-			while (recordset.next()) {
-				dataSheet2Value = recordset.getField(DataField);
-				System.out.println("DataFiels For Sheet2==================================================== "
-						+ dataSheet2Value + "\n");
-//				ActionClass.actrds();
+			try {
+				recordset = conn.executeQuery(query);
+
+				while (recordset.next()) {
+
+					dataSheetSi_No = recordset.getField("Si_No");
+					ApplicationName = recordset.getField("ApplicationName");
+					Proceed = recordset.getField("Proceed");
+					Verify = recordset.getField("Verify");
+
+					dataSheet2Value = recordset.getField(DataField);
+					System.out.println("DataFiels For Sheet2====================================================> "
+							+ dataSheet2Value + "\n");
+				}
+
+				utilsActivity.testcaseInfoWithDataField(); // print extent report info
+				function.ActionRDS();
+			} catch (Exception e) {
+
 			}
 
-			function.ActionRDS();
-		}else {
-			function.ActionRDS();
+		} else {
+			try {
+				utilsActivity.testcaseInfoWithoutDataField(); // print extent report info
+				function.ActionRDS();
+			} catch (Exception e) {
+
+			}
 		}
 	}
 

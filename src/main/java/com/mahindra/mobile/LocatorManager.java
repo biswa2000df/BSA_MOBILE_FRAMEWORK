@@ -59,9 +59,9 @@ public class LocatorManager extends ConnectToDataSheet {
 				ConnectToDataSheet.extractTestData();
 				
 			} catch (Exception e) {
-
 				e.printStackTrace();
 				ConnectToDataSheet.extractTestData();
+				fail++;
 
 			}
 		} else {
