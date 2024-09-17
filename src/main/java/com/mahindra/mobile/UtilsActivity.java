@@ -1,6 +1,7 @@
 package com.mahindra.mobile;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,7 +86,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 		extent = new ExtentReports();
 		extent.attachReporter(htmlReport);
 
-		htmlReport.config().setDocumentTitle("Biswajit MahindraFinance Report");// Title of the report
+		htmlReport.config().setDocumentTitle(" MAHINDRA FINANCE ");// Title of the report
 		htmlReport.config().setReportName("Mobile Automation Report");// Name of the report
 		htmlReport.config().setTestViewChartLocation(ChartLocation.BOTTOM);
 		htmlReport.config().setChartVisibilityOnOpen(false);
@@ -117,7 +118,6 @@ public class UtilsActivity extends ConnectToDataSheet {
 
 	}
 
-	
 	public static void testcaseInfoWithDataField() {
 		ssDatafield = DataField;
 		ssDataSheet2Value = dataSheet2Value;
@@ -129,23 +129,22 @@ public class UtilsActivity extends ConnectToDataSheet {
 						+ "<font color=\"Lime\"><b>Test Data - </b></font>" + ssDataSheet2Value);
 	}
 
-	
 	public static void testcaseInfoWithoutDataField() {
 		test.log(Status.INFO,
 				"<font color=\"Aqua\"><b>Module - </b></font>" + Module + "  "
 						+ "<font color=\"Lime\"><b>Step - </b></font>" + Si_No + "  "
 						+ "<font color=\"MediumSlateBlue\"><b>Action - </b></font>" + Action.toUpperCase());
 	}
-	
 
 	public void passTestCase() throws IOException {
 
 		String TakeScreenshotPath;
 		TakeScreenshotPath = takeScreenShot(driver);
 
-		test.log(Status.PASS, "<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" + ssDataSheet2Value
-				+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>" + Function.ActualResult
-				+ "<br>",
+		test.log(Status.PASS,
+				"<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" + ssDataSheet2Value
+						+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>"
+						+ Function.ActualResult + "<br>",
 //					MediaEntityBuilder.createScreenCaptureFromPath(takeScreenShot(driver, Scenario_ID)).build());
 				MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
 
@@ -156,9 +155,10 @@ public class UtilsActivity extends ConnectToDataSheet {
 		String TakeScreenshotPath;
 		TakeScreenshotPath = takeScreenShot(driver);
 
-		test.log(Status.FAIL, "<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" +  ssDataSheet2Value
-				+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>" + Function.ActualResult
-				+ "<br>",
+		test.log(Status.FAIL,
+				"<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" + ssDataSheet2Value
+						+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>"
+						+ Function.ActualResult + "<br>",
 //					MediaEntityBuilder.createScreenCaptureFromPath(takeScreenShot(driver, Scenario_ID)).build());
 				MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
 
@@ -166,6 +166,74 @@ public class UtilsActivity extends ConnectToDataSheet {
 
 	public void ExtentFlush() {
 		extent.flush();
+	}
+
+	// create html Table here
+
+	public static void CreateHtmlTable() throws IOException {
+
+		try {
+
+			String htmlTable = getFormat("YYYY", "MMMM", "dd", ConnectToMainController.ApplicationName, "HtmlTables",
+					"htmlTableMethod");
+			
+			String filename = htmlTable + File.separator + ConnectToMainController.ApplicationName + "_"
+					+ "HtmlTable_Report_" + time + ".html";
+
+			String backGroundImage = new File(
+					System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator
+							+ "resources" + File.separator + "BackGroundImage" + File.separator + "Automation1.png")
+					.toURI().toString();
+			
+			System.out.println(backGroundImage);
+			FileWriter writer = new FileWriter(filename);
+
+			writer.write("<!DOCTYPE html>\n<html>\n<head>\n");
+
+			writer.write("<style>");
+			writer.write("body { background-image: url('" + backGroundImage
+					+ "'); background-size: cover; background-repeat: no-repeat; }");
+			writer.write("table { border-collapse: collapse; width: 50%; margin: auto; margin-top: 20px; }");
+			writer.write(
+					"th, td { border: 1px solid black; padding: 8px; text-align: center; background-color: #E4E5E5; }");
+			writer.write("th { background-color: #E4E5E5; }");
+			writer.write("</style>");
+			writer.write("</head>\n<body>\n");
+
+			writer.write("<table border=\"1\">\n");
+			writer.write("<tr>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4CAF50; color: white;\">Project</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#1E90FF; color: white;\">Total TCs</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4CAF50; color: white;\">Passed TCs</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#FF6347; color: white;\">Failed TCs</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4682B4; color: white;\">Total Validations in all the TCs</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#32CD32; color: white;\">Passed Validations</th>"
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#FF6347; color: white;\">Failed Validations</th>"
+					+ "<th>Report</th>" + "</tr>");
+
+			writer.write("<tr>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToMainController.ApplicationName + "</td>"
+					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.totalTest
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.pass
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.fail
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToDataSheet.totalValidations + "</td>"
+					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.passValidations
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToDataSheet.failedValidations + "</td>" + "<td><a href=" + Extent_ReportFile
+					+ " target=_blank>View Report</a></td></tr>");
+
+			writer.write("</table>\n");
+			writer.write("</body>\n</html>");
+			writer.close();
+
+//		System.out.println("HTML table has been generated in " + filename);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
 	}
 
 }

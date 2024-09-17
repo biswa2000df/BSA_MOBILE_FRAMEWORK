@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import org.openqa.selenium.WebElement;
 
 import com.codoid.products.fillo.Connection;
@@ -96,7 +99,9 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 				}
 			}
 			try {
+				
 				recordset = conn.executeQuery(queryForModule);// here to check the runstatus and module
+				
 				if (recordset != null) {
 
 					List<Object> rowsList = new ArrayList<Object>();
@@ -110,8 +115,13 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 						rowsList.add(rowValues);
 					}
 
+					try {
+					
 					utilsActivity.extentReport(); // call the extent report method
-
+					}catch(Exception e) {
+						System.out.println(e.getMessage());
+					}
+					
 					int i;
 					for (i = 0; i < rowsList.size(); i++) {
 
@@ -169,6 +179,7 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 
 						System.out.println("\n");
 						System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
+						
 
 						System.out.println("********************  Successfully Completed  ********************" + "\n");
 					}
@@ -184,6 +195,7 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 			System.exit(0);
 		} finally {
 			utilsActivity.ExtentFlush();
+			UtilsActivity.CreateHtmlTable();
 		}
 
 	}
