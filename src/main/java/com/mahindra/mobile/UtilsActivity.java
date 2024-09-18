@@ -19,6 +19,7 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
+
 public class UtilsActivity extends ConnectToDataSheet {
 
 	ExtentHtmlReporter htmlReport;
@@ -30,6 +31,8 @@ public class UtilsActivity extends ConnectToDataSheet {
 	public static String Extent_ReportFile;
 	public static String ssDatafield = null;
 	public static String ssDataSheet2Value = null;
+	public static long executionEndTime;
+	public static String TotalExecutionTime;
 
 	public String takeScreenShot(WebDriver driver) throws IOException {
 
@@ -185,7 +188,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 							+ "resources" + File.separator + "BackGroundImage" + File.separator + "Automation1.png")
 					.toURI().toString();
 			
-			System.out.println(backGroundImage);
+			
 			FileWriter writer = new FileWriter(filename);
 
 			writer.write("<!DOCTYPE html>\n<html>\n<head>\n");
@@ -209,19 +212,26 @@ public class UtilsActivity extends ConnectToDataSheet {
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4682B4; color: white;\">Total Validations in all the TCs</th>"
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#32CD32; color: white;\">Passed Validations</th>"
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#FF6347; color: white;\">Failed Validations</th>"
-					+ "<th>Report</th>" + "</tr>");
+					+ "<th>Report</th>" 
+					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4CAF50; color: white;\">ExecutionTime</th>"
+					+ "</tr>");
 
-			writer.write("<tr>" + "<td style=\"text-align:center; border: 1px solid black;\">"
-					+ ConnectToMainController.ApplicationName + "</td>"
-					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.totalTest
-					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.pass
-					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.fail
-					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
-					+ ConnectToDataSheet.totalValidations + "</td>"
-					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.passValidations
-					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
-					+ ConnectToDataSheet.failedValidations + "</td>" + "<td><a href=" + Extent_ReportFile
-					+ " target=_blank>View Report</a></td></tr>");
+		
+				writer.write("<tr>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+						+ ConnectToMainController.ApplicationName + "</td>"
+						+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.totalTest
+						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.pass
+						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.fail
+						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+						+ ConnectToDataSheet.totalValidations + "</td>"
+						+ "<td style=\"text-align:center; border: 1px solid black;\">"
+						+ ConnectToDataSheet.passValidations + "</td>"
+						+ "<td style=\"text-align:center; border: 1px solid black;\">"
+						+ ConnectToDataSheet.failedValidations + "</td>" + "<td><a href=" + Extent_ReportFile
+						+ " target=_blank>View Report</a></td>" +  "<td style=\"text-align:center; border: 1px solid black;\">"
+						+ TotalExecutionTime + "</td></tr>");
+
+		
 
 			writer.write("</table>\n");
 			writer.write("</body>\n</html>");
@@ -235,5 +245,37 @@ public class UtilsActivity extends ConnectToDataSheet {
 		}
 
 	}
+	
+	
+	public void ExecutionTime() {
+		long hours = 0;
+		long minutes = 0;
+		long seconds = 0;
+		long remainingMilliseconds = 0;
+		long milliseconds = 0;
+
+		executionEndTime = System.nanoTime();
+		long executionTimeInMilliseconds = (executionEndTime - Function.executionStartTime) / 1_000_000;
+	
+
+		hours = executionTimeInMilliseconds / (60 * 60 * 1000);
+		remainingMilliseconds = executionTimeInMilliseconds % (60 * 60 * 1000);
+		minutes = remainingMilliseconds / (60 * 1000);
+		remainingMilliseconds %= (60 * 1000);
+		seconds = remainingMilliseconds / 1000;
+		milliseconds = remainingMilliseconds % 1000;
+
+		if (hours != 0) {
+			TotalExecutionTime = hours + " hour " + minutes + " min " + seconds + " seconds " + milliseconds + " ms";
+		} else if (minutes != 0) {
+			TotalExecutionTime = minutes + " min " + seconds + " seconds " + milliseconds + " ms";
+		} else if (seconds != 0) {
+			TotalExecutionTime = seconds + " seconds " + milliseconds + " ms";
+		} else
+			TotalExecutionTime = milliseconds + " ms";
+
+
+	}
+
 
 }

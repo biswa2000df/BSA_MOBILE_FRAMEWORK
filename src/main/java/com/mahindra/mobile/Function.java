@@ -13,6 +13,7 @@ public class Function extends ConnectToDataSheet {
 	public static List<WebElement> elements;
 	static UtilsActivity utilsActivity;
 	public static boolean ActualResult;
+	public static long executionStartTime;
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -27,6 +28,7 @@ public class Function extends ConnectToDataSheet {
 
 			if (Action.equalsIgnoreCase("Monitoring_Properties")) {
 				// start time count
+				executionStartTime = System.nanoTime();
 			}
 
 			else if (Action.equalsIgnoreCase("START_APPLICATION")) {

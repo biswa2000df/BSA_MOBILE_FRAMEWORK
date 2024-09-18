@@ -49,14 +49,18 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 	static LocatorManager locatorManager;
 	static Function function;
 	static UtilsActivity utilsActivity;
-	
+
 	public static int totalTest, pass, fail;
 	public static int totalValidations, passValidations, failedValidations;
 
 	public static void extractAllData() throws Exception {
-		
-		totalTest = 0; pass = 0; fail = 0;
-		totalValidations = 0; passValidations = 0; failedValidations = 0;
+
+		totalTest = 0;
+		pass = 0;
+		fail = 0;
+		totalValidations = 0;
+		passValidations = 0;
+		failedValidations = 0;
 
 		// create object
 		locatorManager = new LocatorManager();
@@ -99,9 +103,9 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 				}
 			}
 			try {
-				
+
 				recordset = conn.executeQuery(queryForModule);// here to check the runstatus and module
-				
+
 				if (recordset != null) {
 
 					List<Object> rowsList = new ArrayList<Object>();
@@ -116,12 +120,12 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 					}
 
 					try {
-					
-					utilsActivity.extentReport(); // call the extent report method
-					}catch(Exception e) {
+
+						utilsActivity.extentReport(); // call the extent report method
+					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
-					
+
 					int i;
 					for (i = 0; i < rowsList.size(); i++) {
 
@@ -151,40 +155,39 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 						System.out.println("Action            ====================> " + Action);
 
 						try {
-							
+
 							if (!TestCaseID.equals(sTest_Case)) { // here we created the report to the testcase id
 								utilsActivity.testCaseCreate();
 							}
 							sTest_Case = TestCaseID;
 							totalTest++;
-							
-							if(Action.equalsIgnoreCase("CheckVisibility")) {
+
+							if (Action.equalsIgnoreCase("CheckVisibility")) {
 								totalValidations++;
 							}
-							
-							locatorManager.mapToLocator(); 
-							
+
+							locatorManager.mapToLocator();
+
 							pass = totalTest - fail;
 							passValidations = totalValidations - failedValidations;
-							
-							System.out.println("TotalValidation = " + totalValidations + " PassedValidations = " + passValidations + " FailedValidations = " + failedValidations);
-							System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
-							
+
+//							System.out.println("TotalValidation = " + totalValidations + " PassedValidations = " + passValidations + " FailedValidations = " + failedValidations);
+//							System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
+
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 
 					}
 					if (i == rowsList.size()) {
-
 						System.out.println("\n");
-						System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
-						
+//						System.out.println("TotalTest = " + totalTest + " Pass = " + pass + " Fail = " + fail);
 
 						System.out.println("********************  Successfully Completed  ********************" + "\n");
 					}
 				}
-				recordset.close();
+				if (recordset != null)
+					recordset.close();
 
 			} catch (Exception e) {
 				System.out.println("SORRY!!! 'DataSheet' sheet are present BUT problem on ModulName column value");
@@ -195,13 +198,14 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 			System.exit(0);
 		} finally {
 			utilsActivity.ExtentFlush();
+			utilsActivity.ExecutionTime();
 			UtilsActivity.CreateHtmlTable();
+			MailSend.mailSend();
 		}
 
 	}
 
 	public static void extractTestData() throws Exception {
-
 		function = new Function();
 
 		if (DataField != null && !DataField.isEmpty()) {

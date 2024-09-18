@@ -2,9 +2,9 @@ package com.mahindra.mobile;
 
 public class Framework {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
-		ConnectToMainController.mainControllerSheet();
+		LicenceClass.LicenceCheck();
 
 	}
 
