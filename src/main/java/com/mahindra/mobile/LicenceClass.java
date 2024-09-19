@@ -75,8 +75,8 @@ public class LicenceClass {
 
 			if (dt.before(date1) && validateIP == true) {
 				System.out.println();
-				System.out.println("**********Biswajit Scriptless Automation Tool is a node based License.**********");
-				System.out.println("            ********" + "Your License Validity is till " + sDate1 + "********");
+				System.out.println("********** Biswajit Scriptless Automation Tool is a node based License **********");
+				System.out.println("            ********" + " Your License Validity is till " + sDate1 + " ********");
 				System.out.println("\n");
 				System.out.println("                ********** Welcome " + System.getProperty("user.name").toUpperCase()
 						+ " **********");
@@ -101,6 +101,7 @@ public class LicenceClass {
 
 		List<String> al = new ArrayList<String>();
 		al.add("192_168_1_101");
+		al.add("192_168_1_106");
 		String IP = MobileIP.replaceAll("\\.", "_");
 		for (int i = 0; i < al.size(); i++) {
 			if (al.get(i).equalsIgnoreCase(IP)) {

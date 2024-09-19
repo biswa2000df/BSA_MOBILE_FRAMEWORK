@@ -19,7 +19,6 @@ import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
-
 public class UtilsActivity extends ConnectToDataSheet {
 
 	ExtentHtmlReporter htmlReport;
@@ -95,12 +94,12 @@ public class UtilsActivity extends ConnectToDataSheet {
 		htmlReport.config().setChartVisibilityOnOpen(false);
 		htmlReport.config().setTheme(Theme.DARK);
 
-		extent.setSystemInfo("Comapny Name", "APMOSYS");
+		extent.setSystemInfo("Comapny Name", "MAHINDRA FINANCE");
 		extent.setSystemInfo("FrameWork", "Biswajit Framework");
 		extent.setSystemInfo("Project Name", ConnectToMainController.ApplicationName);
 		extent.setSystemInfo("Manager", "Dharam Yengal");
-		extent.setSystemInfo("Test Lead", "Shubham Ugale");
-		extent.setSystemInfo("Sub-Test Lead", "Namrate Arun Shete");
+		extent.setSystemInfo("Test Lead", "Shantesh & Shubham");
+		extent.setSystemInfo("Sub-Test Lead", "Vikrant & Namrata");
 		extent.setSystemInfo("OS", System.getProperty("os.name"));
 		extent.setSystemInfo("System User Name", System.getProperty("user.name"));
 		extent.setSystemInfo("Tester Name", "Biswajit");
@@ -127,16 +126,19 @@ public class UtilsActivity extends ConnectToDataSheet {
 
 		test.log(Status.INFO,
 				"<font color=\"Aqua\"><b>Module - </b></font>" + Module + "  "
-						+ "<font color=\"Lime\"><b>Step - </b></font>" + Si_No + "  "
-						+ "<font color=\"Red\"><b>Data Field - </b></font>" + ssDatafield.toUpperCase() + "  "
-						+ "<font color=\"Lime\"><b>Test Data - </b></font>" + ssDataSheet2Value);
+						+ " <font color=\"Lime\"><b>Step - </b></font>" + Si_No + "  "
+						+ " <font color=\"Red\"><b>Data Field - </b></font>" + ssDatafield.toUpperCase() + "  "
+						+ " <font color=\"MediumSlateBlue\"><b>Test Data - </b></font>" + ssDataSheet2Value
+						+ " <font color=\"Yellow\"><b>StepDescription - </b></font>" + TestCaseStepDescription);
 	}
 
 	public static void testcaseInfoWithoutDataField() {
 		test.log(Status.INFO,
-				"<font color=\"Aqua\"><b>Module - </b></font>" + Module + "  "
-						+ "<font color=\"Lime\"><b>Step - </b></font>" + Si_No + "  "
-						+ "<font color=\"MediumSlateBlue\"><b>Action - </b></font>" + Action.toUpperCase());
+			    "<font color=\"Aqua\"><b>Module - </b></font>" + Module + "  "
+			    + " <font color=\"Lime\"><b>Step - </b></font>" + Si_No + "  "
+			    + " <font color=\"MediumSlateBlue\"><b>Action - </b></font>" + Action.toUpperCase()
+			    + " <font color=\"Gold\"><b>StepDescription - </b></font>" + TestCaseStepDescription);
+
 	}
 
 	public void passTestCase() throws IOException {
@@ -145,11 +147,11 @@ public class UtilsActivity extends ConnectToDataSheet {
 		TakeScreenshotPath = takeScreenShot(driver);
 
 		test.log(Status.PASS,
-				"<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" + ssDataSheet2Value
-						+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>"
-						+ Function.ActualResult + "<br>",
-//					MediaEntityBuilder.createScreenCaptureFromPath(takeScreenShot(driver, Scenario_ID)).build());
-				MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
+			    "<h6><br><font color=\"Red\"><b>Expected Result is - </b></font></h6>" +
+			    "<h6><font color=\"Lime\"><b>" + ssDataSheet2Value.toUpperCase() + "</b></font></h6>" + 
+			    "<h6><br><font color=\"Red\"><b>Actual Result is - </b></font></h6>" +
+			    "<h6><font color=\"Lime\"><b>" + String.valueOf(Function.ActualResult).toUpperCase() + "</b></font></h6><br>",
+			    MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
 
 	}
 
@@ -159,11 +161,11 @@ public class UtilsActivity extends ConnectToDataSheet {
 		TakeScreenshotPath = takeScreenShot(driver);
 
 		test.log(Status.FAIL,
-				"<h6><br><font color=\"Red\"><b> Expected Result is - </b></font></h6>" + ssDataSheet2Value
-						+ "	 <h6><br> <font color=\"Red\"><b>Actual Result is - </b></font></h6>"
-						+ Function.ActualResult + "<br>",
-//					MediaEntityBuilder.createScreenCaptureFromPath(takeScreenShot(driver, Scenario_ID)).build());
-				MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
+			    "<h6><br><font color=\"Red\"><b>Expected Result is - </b></font></h6>" +
+			    "<h6><font color=\"Lime\"><b>" + ssDataSheet2Value.toUpperCase() + "</b></font></h6>" + 
+			    "<h6><br><font color=\"Red\"><b>Actual Result is - </b></font></h6>" +
+			    "<h6><font color=\"Red\"><b>" + String.valueOf(Function.ActualResult).toUpperCase() + "</b></font></h6><br>",
+			    MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenshotPath).build());
 
 	}
 
@@ -179,16 +181,13 @@ public class UtilsActivity extends ConnectToDataSheet {
 
 			String htmlTable = getFormat("YYYY", "MMMM", "dd", ConnectToMainController.ApplicationName, "HtmlTables",
 					"htmlTableMethod");
-			
+
 			String filename = htmlTable + File.separator + ConnectToMainController.ApplicationName + "_"
 					+ "HtmlTable_Report_" + time + ".html";
 
-			String backGroundImage = new File(
-					System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator
-							+ "resources" + File.separator + "BackGroundImage" + File.separator + "Automation1.png")
-					.toURI().toString();
-			
-			
+			String backGroundImage = new File(System.getProperty("user.dir") + File.separator + "DataSheet"
+					+ File.separator + "BackGroundImage" + File.separator + "Automation1.png").toURI().toString();
+
 			FileWriter writer = new FileWriter(filename);
 
 			writer.write("<!DOCTYPE html>\n<html>\n<head>\n");
@@ -200,8 +199,11 @@ public class UtilsActivity extends ConnectToDataSheet {
 			writer.write(
 					"th, td { border: 1px solid black; padding: 8px; text-align: center; background-color: #E4E5E5; }");
 			writer.write("th { background-color: #E4E5E5; }");
+			writer.write("h1 { text-align: center; color: white; margin-top: 20px; font-weight: bold; }"); 
 			writer.write("</style>");
 			writer.write("</head>\n<body>\n");
+			
+			writer.write("<h1><b>Welcome Biswajit, Automation Report</b></h1>\n");
 
 			writer.write("<table border=\"1\">\n");
 			writer.write("<tr>"
@@ -212,26 +214,22 @@ public class UtilsActivity extends ConnectToDataSheet {
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4682B4; color: white;\">Total Validations in all the TCs</th>"
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#32CD32; color: white;\">Passed Validations</th>"
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#FF6347; color: white;\">Failed Validations</th>"
-					+ "<th>Report</th>" 
+					+ "<th>Report</th>"
 					+ "<th style=\"text-align:center; border: 1px solid black; background-color:#4CAF50; color: white;\">ExecutionTime</th>"
 					+ "</tr>");
 
-		
-				writer.write("<tr>" + "<td style=\"text-align:center; border: 1px solid black;\">"
-						+ ConnectToMainController.ApplicationName + "</td>"
-						+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.totalTest
-						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.pass
-						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.fail
-						+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
-						+ ConnectToDataSheet.totalValidations + "</td>"
-						+ "<td style=\"text-align:center; border: 1px solid black;\">"
-						+ ConnectToDataSheet.passValidations + "</td>"
-						+ "<td style=\"text-align:center; border: 1px solid black;\">"
-						+ ConnectToDataSheet.failedValidations + "</td>" + "<td><a href=" + Extent_ReportFile
-						+ " target=_blank>View Report</a></td>" +  "<td style=\"text-align:center; border: 1px solid black;\">"
-						+ TotalExecutionTime + "</td></tr>");
-
-		
+			writer.write("<tr>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToMainController.ApplicationName + "</td>"
+					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.totalTest
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.pass
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.fail
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToDataSheet.totalValidations + "</td>"
+					+ "<td style=\"text-align:center; border: 1px solid black;\">" + ConnectToDataSheet.passValidations
+					+ "</td>" + "<td style=\"text-align:center; border: 1px solid black;\">"
+					+ ConnectToDataSheet.failedValidations + "</td>" + "<td><a href=" + Extent_ReportFile
+					+ " target=_blank>View Report</a></td>"
+					+ "<td style=\"text-align:center; border: 1px solid black;\">" + TotalExecutionTime + "</td></tr>");
 
 			writer.write("</table>\n");
 			writer.write("</body>\n</html>");
@@ -245,8 +243,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 		}
 
 	}
-	
-	
+
 	public void ExecutionTime() {
 		long hours = 0;
 		long minutes = 0;
@@ -256,7 +253,6 @@ public class UtilsActivity extends ConnectToDataSheet {
 
 		executionEndTime = System.nanoTime();
 		long executionTimeInMilliseconds = (executionEndTime - Function.executionStartTime) / 1_000_000;
-	
 
 		hours = executionTimeInMilliseconds / (60 * 60 * 1000);
 		remainingMilliseconds = executionTimeInMilliseconds % (60 * 60 * 1000);
@@ -274,8 +270,6 @@ public class UtilsActivity extends ConnectToDataSheet {
 		} else
 			TotalExecutionTime = milliseconds + " ms";
 
-
 	}
-
 
 }
