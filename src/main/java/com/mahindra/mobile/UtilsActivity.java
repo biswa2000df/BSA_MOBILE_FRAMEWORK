@@ -89,7 +89,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 		extent.attachReporter(htmlReport);
 
 		htmlReport.config().setDocumentTitle(" MAHINDRA FINANCE ");// Title of the report
-		htmlReport.config().setReportName("Mobile Automation Report");// Name of the report
+		htmlReport.config().setReportName(ConnectToMainController.ApplicationName + " Mobile Automation Report");// Name of the report
 		htmlReport.config().setTestViewChartLocation(ChartLocation.BOTTOM);
 		htmlReport.config().setChartVisibilityOnOpen(false);
 		htmlReport.config().setTheme(Theme.DARK);
@@ -97,7 +97,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 		extent.setSystemInfo("Comapny Name", "MAHINDRA FINANCE");
 		extent.setSystemInfo("FrameWork", "Biswajit Framework");
 		extent.setSystemInfo("Project Name", ConnectToMainController.ApplicationName);
-		extent.setSystemInfo("Manager", "Dharam Yengal");
+		extent.setSystemInfo("Manager", "DHARAM YENGAL");
 		extent.setSystemInfo("Test Lead", "Shantesh & Shubham");
 		extent.setSystemInfo("Sub-Test Lead", "Vikrant & Namrata");
 		extent.setSystemInfo("OS", System.getProperty("os.name"));
@@ -200,10 +200,13 @@ public class UtilsActivity extends ConnectToDataSheet {
 					"th, td { border: 1px solid black; padding: 8px; text-align: center; background-color: #E4E5E5; }");
 			writer.write("th { background-color: #E4E5E5; }");
 			writer.write("h1 { text-align: center; color: white; margin-top: 20px; font-weight: bold; }"); 
+			writer.write("h2 { text-align: center; color: white; margin-top: 20px; font-weight: bold; }"); 
 			writer.write("</style>");
 			writer.write("</head>\n<body>\n");
 			
-			writer.write("<h1><b>Welcome Biswajit, Automation Report</b></h1>\n");
+			writer.write("<h1><b>Mahindra & Mahindra Financial Services Limited - " + ConnectToMainController.ApplicationName + " Mobile Automation Test Report</b></h1>\n");
+			writer.write("<h2>Welcome Biswajit Sahoo Framework Report</h2>\n");
+		//	writer.write("<h1><b>Welcome Biswajit, Automation Report</b></h1>\n");
 
 			writer.write("<table border=\"1\">\n");
 			writer.write("<tr>"

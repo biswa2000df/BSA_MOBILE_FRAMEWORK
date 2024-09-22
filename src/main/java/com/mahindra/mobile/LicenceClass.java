@@ -20,6 +20,11 @@ import javax.swing.JOptionPane;
 import com.codoid.products.exception.FilloException;
 
 public class LicenceClass {
+	
+	
+	public static void Run() throws Exception {
+		LicenceCheck();
+	}
 
 	public static void LicenceCheck() throws Exception {
 
@@ -61,7 +66,7 @@ public class LicenceClass {
 				JFrame parent = new JFrame();
 				JOptionPane.showMessageDialog(parent,
 						"Your Device is not connected to Wi-Fi !!! \n Please Connect your device to Wi-Fi.\n"
-								+ "                       \uD83D\uDE0A\u2764\uD83D\uDE0A");
+								+ "                       \uD83D\uDE0A\uD83D\uDE0A\uD83D\uDE0A");
 				System.exit(1);
 //	                System.out.println("Device is not connected to Wi-Fi.");
 			}
@@ -89,7 +94,7 @@ public class LicenceClass {
 			} else {
 				JFrame parent = new JFrame();
 				JOptionPane.showMessageDialog(parent,
-						"License has Expired.\n Kindly contact Biswajit Sahoo. \uD83D\uDE0A\u2764\uD83D\uDE0A");
+						"License has Expired.\nKindly contact Biswajit Sahoo. \uD83D\uDE0A\uD83D\uDE0A\uD83D\uDE0A");
 				System.exit(1);
 			}
 		} catch (Exception e) {
@@ -98,11 +103,12 @@ public class LicenceClass {
 	}
 
 	public static boolean validateIPid(String MobileIP) {
-
+		String IP = MobileIP.replaceAll("\\.", "_");
 		List<String> al = new ArrayList<String>();
 		al.add("192_168_1_101");
 		al.add("192_168_1_106");
-		String IP = MobileIP.replaceAll("\\.", "_");
+//		al.add(IP);
+		
 		for (int i = 0; i < al.size(); i++) {
 			if (al.get(i).equalsIgnoreCase(IP)) {
 				return true;
@@ -110,7 +116,7 @@ public class LicenceClass {
 		}
 		JFrame parent = new JFrame();
 		JOptionPane.showMessageDialog(parent,
-				"You are not licensed for this Framework ! \n Please contact Biswajit Sahoo.\uD83D\uDE0A\u2764\uD83D\uDE0A");
+				"You are not licensed for this Framework ! \nPlease contact Biswajit Sahoo.\uD83D\uDE0A\uD83D\uDE0A\uD83D\uDE0A");
 		System.exit(1);
 		return false;
 	}

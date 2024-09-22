@@ -1,11 +1,15 @@
 package com.mahindra.mobile;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
 
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 
 public class Function extends ConnectToDataSheet {
 
@@ -14,6 +18,7 @@ public class Function extends ConnectToDataSheet {
 	static UtilsActivity utilsActivity;
 	public static boolean ActualResult;
 	public static long executionStartTime;
+	static TouchAction touchAction;
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -77,6 +82,29 @@ public class Function extends ConnectToDataSheet {
 				String digits = input.replaceAll("\\D+", "");
 				Thread.sleep(Integer.parseInt(digits));
 
+			}
+			
+			else if(Action.equalsIgnoreCase("ScrollDown")) {
+				// Get the size of the screen
+				int screenHeight = driver.manage().window().getSize().getHeight();
+				int screenWidth = driver.manage().window().getSize().getWidth();
+//				System.out.println("screenHeight = " + screenHeight);
+//				System.out.println("screenWidth = " + screenWidth);
+				
+				
+				// Calculate the start and end points for the swipe
+				int startX = screenWidth / 2; // Horizontal center of the screen
+				int startY = (int) (screenHeight * 0.8); // Start from the top 80% of the screen
+				int endY = (int) (screenHeight * 0.3); // Swipe down to 30% of the screen height
+
+				// Perform the swipe gesture for pull down to refresh
+			    touchAction = new TouchAction(driver);
+				touchAction
+				    .press(PointOption.point(startX, startY))
+				    .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(3))) // Hold for a moment
+				    .moveTo(PointOption.point(startX, endY))
+				    .release()
+				    .perform();
 			}
 			
 			else if (Action.equalsIgnoreCase("CheckVisibility")) {
