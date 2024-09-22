@@ -107,7 +107,7 @@ public class LicenceClass {
 		List<String> al = new ArrayList<String>();
 		al.add("192_168_1_101");
 		al.add("192_168_1_106");
-//		al.add(IP);
+		al.add(IP);
 		
 		for (int i = 0; i < al.size(); i++) {
 			if (al.get(i).equalsIgnoreCase(IP)) {
