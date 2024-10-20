@@ -1,8 +1,12 @@
 package com.mahindra.mobile;
 
+import static io.restassured.RestAssured.given;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,8 +22,13 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
+import com.github.javafaker.Faker;
+
+import io.restassured.response.Response;
 
 public class UtilsActivity extends ConnectToDataSheet {
+	
+	static Faker faker;
 
 	ExtentHtmlReporter htmlReport;
 	ExtentReports extent;
@@ -274,5 +283,9 @@ public class UtilsActivity extends ConnectToDataSheet {
 			TotalExecutionTime = milliseconds + " ms";
 
 	}
+	
+
+	
+	
 
 }

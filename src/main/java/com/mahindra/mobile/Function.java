@@ -1,13 +1,19 @@
 package com.mahindra.mobile;
 
+import java.awt.Robot;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Keyboard;
 
-
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.nativekey.AndroidKey;
+import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 
@@ -19,6 +25,7 @@ public class Function extends ConnectToDataSheet {
 	public static boolean ActualResult;
 	public static long executionStartTime;
 	static TouchAction touchAction;
+	public static int randomNumber;
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -26,6 +33,8 @@ public class Function extends ConnectToDataSheet {
 	}
 
 	public static void ActionRDS() throws Exception {
+		
+		 Robot robot;
 		
 		utilsActivity = new UtilsActivity();
 
@@ -83,6 +92,36 @@ public class Function extends ConnectToDataSheet {
 				Thread.sleep(Integer.parseInt(digits));
 
 			}
+			
+			else if (Action.contains("cameraImageInjection")) {
+				HashMap<String, String> cameraInjection = new HashMap<String, String>();
+				cameraInjection.put("action", "cameraImageInjection");
+				cameraInjection.put("imageUrl", "media://fbb291007ac2f3d6c5d56787d75740f5175aba2a");
+
+				((JavascriptExecutor) driver).executeScript("browserstack_executor", cameraInjection);
+
+
+			}
+			
+			else if (Action.contains("GenerateRandomNumber")) {
+				 int numDigits = Integer.parseInt(dataSheet2Value);
+
+			        // Calculate the minimum and maximum values for the given number of digits
+			        int min = (int) Math.pow(10, numDigits - 1);
+			        int max = (int) Math.pow(10, numDigits) - 1;
+
+			        // Generate the random number in the given range
+			        Random random = new Random();
+			        randomNumber = min + random.nextInt(max - min + 1);
+			        System.out.println("Generating random Number = " + randomNumber);
+
+			}
+			
+			else if (Action.contains("MPIN")) {
+				String mpin = String.valueOf(randomNumber);
+				element.sendKeys(mpin);
+			}
+			
 			
 			else if(Action.equalsIgnoreCase("ScrollDown")) {
 				// Get the size of the screen

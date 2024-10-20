@@ -1,6 +1,5 @@
 package com.mahindra.mobile;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,33 +30,45 @@ public class Android_IOS_Driver {
 
 		try {
 
-			if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("Android")) {
-
-				browserstackOptions.put("platformName", MobileConfiguration.DevicePlatform);
-				browserstackOptions.put("deviceName", MobileConfiguration.DeviceName);
-				browserstackOptions.put("platformVersion", MobileConfiguration.DevicePlatformVersion);
-				browserstackOptions.put("name", MobileConfiguration.Process);
+			if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("Android")) {	
+				
+				capabilities.setCapability("platformName", MobileConfiguration.DevicePlatform);
+				capabilities.setCapability("deviceName", MobileConfiguration.DeviceName);
+				capabilities.setCapability("platformVersion","13.0");
+				capabilities.setCapability("name",  MobileConfiguration.Process + " BISWAJIT SAHOO");
 
 				if (MobileConfiguration.AppReset.equalsIgnoreCase("NO")) {
-					browserstackOptions.put("noReset", true);
-					browserstackOptions.put("fullReset", false);
+					capabilities.setCapability("noReset", true);
+					capabilities.setCapability("fullReset", false);
 				} else if (MobileConfiguration.AppReset.equalsIgnoreCase("YES")) {
-					browserstackOptions.put("noReset", false);
-					browserstackOptions.put("fullReset", true);
+					capabilities.setCapability("noReset", false);
+					capabilities.setCapability("fullReset", true);
 				} else if (MobileConfiguration.Pre_InstalledApp.equalsIgnoreCase("NO")) {
-					browserstackOptions.put("APP", MobileConfiguration.AppPath);
+					capabilities.setCapability("APP", MobileConfiguration.AppPath);
 				}
 
-				browserstackOptions.put("appPackage", MobileConfiguration.App_PackageName);
-				browserstackOptions.put("appActivity", MobileConfiguration.App_PackageActivityName);
-
-				capabilities.setCapability("bstack:options", browserstackOptions);
+				
+				capabilities.setCapability("app", "bs://a1a4c73044c410ff61b3d725e6f510b031088676");
+				
+				capabilities.setCapability("interactiveDebugging", true);
+				capabilities.setCapability("build", MobileConfiguration.Process + " - BISWAJIT SAHOO"); 
+				capabilities.setCapability("name", MobileConfiguration.Process + " - Test Suite - BISWAJIT SAHOO"); 
+				capabilities.setCapability("autoGrantPermissions", true);
+				capabilities.setCapability("browserstack.debug", true);
+				capabilities.setCapability("browserstack.video", true);
+				capabilities.setCapability("acceptSslCerts", true);
+				
+				
+				
+//				capabilities.setCapability("appPackage", MobileConfiguration.App_PackageName);
+//				capabilities.setCapability("appActivity", MobileConfiguration.App_PackageActivityName);
 
 				url = new URL(BrowserStackUrl);
 				driver = new AndroidDriver<WebElement>(url, capabilities);
 				driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
 						TimeUnit.SECONDS);
-
+				
+				
 			} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
 				browserstackOptions.put("platformName", MobileConfiguration.DevicePlatform);

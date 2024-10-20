@@ -4,7 +4,8 @@ public class Framework {
 
 	public static void main(String[] args) throws Exception {
 
-		LicenceClass.Run();
+//		LicenceClass.Run();
+		ConnectToMainController.mainControllerSheet();
 
 	}
 
