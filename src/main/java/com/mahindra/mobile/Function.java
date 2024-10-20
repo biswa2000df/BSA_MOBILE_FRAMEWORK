@@ -94,11 +94,8 @@ public class Function extends ConnectToDataSheet {
 			}
 			
 			else if (Action.contains("cameraImageInjection")) {
-				HashMap<String, String> cameraInjection = new HashMap<String, String>();
-				cameraInjection.put("action", "cameraImageInjection");
-				cameraInjection.put("imageUrl", "media://fbb291007ac2f3d6c5d56787d75740f5175aba2a");
-
-				((JavascriptExecutor) driver).executeScript("browserstack_executor", cameraInjection);
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("browserstack_executor: {\"action\": \"cameraImageInjection\", \"arguments\": {\"imageUrl\": \"media://" + dataSheet2Value + "\"}}");
 
 
 			}

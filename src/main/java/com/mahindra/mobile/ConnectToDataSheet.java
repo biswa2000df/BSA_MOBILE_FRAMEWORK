@@ -14,6 +14,10 @@ import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.screenrecording.CanRecordScreen;
+
 public class ConnectToDataSheet extends Android_IOS_Driver {
 
 	public static String Si_No;
@@ -54,6 +58,8 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 	public static int totalValidations, passValidations, failedValidations;
 
 	public static void extractAllData() throws Exception {
+		
+		
 
 		totalTest = 0;
 		pass = 0;
@@ -125,6 +131,8 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
+					
+					
 
 					int i;
 					for (i = 0; i < rowsList.size(); i++) {
@@ -197,13 +205,14 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 			System.out.println("SORRY!!! 'DataSheet' sheet are present or not or SheetName is Missmatch ");
 			System.exit(0);
 		} finally {
-			utilsActivity.ExtentFlush();
 			utilsActivity.ExecutionTime();
+			utilsActivity.ExtentFlush();
 			UtilsActivity.CreateHtmlTable();
 			MailSend.mailSend();
 		}
 
 	}
+
 
 	public static void extractTestData() throws Exception {
 		function = new Function();

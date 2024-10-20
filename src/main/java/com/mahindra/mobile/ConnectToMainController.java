@@ -252,9 +252,14 @@ public class ConnectToMainController {
 
 			try {
 				dataSheetFile.exists();
+				try {
+					// call to data sheet xlsx file
+					ConnectToDataSheet.extractAllData();
+				} catch (Exception e) {
+					
+					System.out.println(e);
 
-				// call to data sheet xlsx file
-				ConnectToDataSheet.extractAllData();
+				}
 
 			} catch (Exception e) {
 				System.out.println(

@@ -24,6 +24,8 @@ import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.github.javafaker.Faker;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.screenrecording.CanRecordScreen;
 import io.restassured.response.Response;
 
 public class UtilsActivity extends ConnectToDataSheet {
@@ -41,6 +43,8 @@ public class UtilsActivity extends ConnectToDataSheet {
 	public static String ssDataSheet2Value = null;
 	public static long executionEndTime;
 	public static String TotalExecutionTime;
+	
+	
 
 	public String takeScreenShot(WebDriver driver) throws IOException {
 
@@ -283,6 +287,7 @@ public class UtilsActivity extends ConnectToDataSheet {
 			TotalExecutionTime = milliseconds + " ms";
 
 	}
+	
 	
 
 	

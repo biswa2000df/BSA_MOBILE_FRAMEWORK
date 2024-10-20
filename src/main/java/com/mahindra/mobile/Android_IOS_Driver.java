@@ -1,11 +1,12 @@
 package com.mahindra.mobile;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import io.appium.java_client.AppiumDriver;
@@ -14,12 +15,15 @@ import io.appium.java_client.ios.IOSDriver;
 
 public class Android_IOS_Driver {
 
-	static AppiumDriver<WebElement> driver;
+	static AppiumDriver driver;
 	static DesiredCapabilities capabilities;
 	static URL url;
 	static Map<String, Object> browserstackOptions;
 
 	public static void InitialisationDriverRemote() throws Exception {
+		Date now = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		String formattedDate = formatter.format(now);
 
 		final String BrowserStackUrl = "https://" + MobileConfiguration.UserName + ":" + MobileConfiguration.AccessKey
 				+ "@hub-cloud.browserstack.com/wd/hub";
@@ -30,12 +34,12 @@ public class Android_IOS_Driver {
 
 		try {
 
-			if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("Android")) {	
-				
+			if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("Android")) {
+
 				capabilities.setCapability("platformName", MobileConfiguration.DevicePlatform);
 				capabilities.setCapability("deviceName", MobileConfiguration.DeviceName);
-				capabilities.setCapability("platformVersion","13.0");
-				capabilities.setCapability("name",  MobileConfiguration.Process + " BISWAJIT SAHOO");
+				capabilities.setCapability("platformVersion",  MobileConfiguration.DevicePlatformVersion);
+				capabilities.setCapability("name", MobileConfiguration.Process + " BISWAJIT SAHOO");
 
 				if (MobileConfiguration.AppReset.equalsIgnoreCase("NO")) {
 					capabilities.setCapability("noReset", true);
@@ -47,28 +51,24 @@ public class Android_IOS_Driver {
 					capabilities.setCapability("APP", MobileConfiguration.AppPath);
 				}
 
-				
 				capabilities.setCapability("app", "bs://a1a4c73044c410ff61b3d725e6f510b031088676");
-				
+				capabilities.setCapability("browserstack.enableCameraImageInjection", true);
 				capabilities.setCapability("interactiveDebugging", true);
-				capabilities.setCapability("build", MobileConfiguration.Process + " - BISWAJIT SAHOO"); 
-				capabilities.setCapability("name", MobileConfiguration.Process + " - Test Suite - BISWAJIT SAHOO"); 
+				capabilities.setCapability("build", "Udaan_" + MobileConfiguration.Process + " - SahooBiswajit");
+				capabilities.setCapability("name", "UDAAN_"+ MobileConfiguration.Process + "_ANDROID_APP" + formattedDate);
 				capabilities.setCapability("autoGrantPermissions", true);
 				capabilities.setCapability("browserstack.debug", true);
 				capabilities.setCapability("browserstack.video", true);
 				capabilities.setCapability("acceptSslCerts", true);
-				
-				
-				
+
 //				capabilities.setCapability("appPackage", MobileConfiguration.App_PackageName);
 //				capabilities.setCapability("appActivity", MobileConfiguration.App_PackageActivityName);
 
 				url = new URL(BrowserStackUrl);
-				driver = new AndroidDriver<WebElement>(url, capabilities);
+				driver = new AndroidDriver(url, capabilities);
 				driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
 						TimeUnit.SECONDS);
-				
-				
+
 			} else if (MobileConfiguration.DevicePlatform.equalsIgnoreCase("IOS")) {
 
 				browserstackOptions.put("platformName", MobileConfiguration.DevicePlatform);
@@ -92,7 +92,7 @@ public class Android_IOS_Driver {
 				capabilities.setCapability("bstack:options", browserstackOptions);
 
 				url = new URL(BrowserStackUrl);
-				driver = new IOSDriver<WebElement>(url, capabilities);
+				driver = new IOSDriver(url, capabilities);
 				driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
 						TimeUnit.SECONDS);
 
@@ -101,6 +101,7 @@ public class Android_IOS_Driver {
 			e.printStackTrace();
 			System.exit(0);
 		}
+	
 	}
 
 	public static void InitialisationDriverLocal() throws Exception {
@@ -130,7 +131,7 @@ public class Android_IOS_Driver {
 				capabilities.setCapability("appActivity", MobileConfiguration.App_PackageActivityName);
 
 				url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
-				driver = new AndroidDriver<WebElement>(url, capabilities);
+				driver = new AndroidDriver(url, capabilities);
 				driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
 						TimeUnit.SECONDS);
 
@@ -155,7 +156,7 @@ public class Android_IOS_Driver {
 				capabilities.setCapability("appActivity", MobileConfiguration.App_PackageActivityName);
 
 				url = new URL("http://" + MobileConfiguration.AppiumPort + "/wd/hub");
-				driver = new IOSDriver<WebElement>(url, capabilities);
+				driver = new IOSDriver(url, capabilities);
 				driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait),
 						TimeUnit.SECONDS);
 			}
@@ -163,6 +164,7 @@ public class Android_IOS_Driver {
 			e.printStackTrace();
 			System.exit(0);
 		}
+	
 
 	}
 
