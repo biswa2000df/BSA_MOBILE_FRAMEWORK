@@ -253,8 +253,10 @@ public class ConnectToMainController {
 			try {
 				dataSheetFile.exists();
 				try {
+					//call to row count for datasheet sheet2
+					int sheet2rowCount = dataSheetTwoRowCount();
 					// call to data sheet xlsx file
-					ConnectToDataSheet.extractAllData();
+					ConnectToDataSheet.extractAllData(sheet2rowCount);
 				} catch (Exception e) {
 					
 					System.out.println(e);
@@ -271,6 +273,29 @@ public class ConnectToMainController {
 			System.out.println("SORRY!!! 'DataSheet' folder is not present");
 			System.exit(0);
 		}
+	}
+	
+	
+	//count data sheet two row count
+	public static int dataSheetTwoRowCount() throws Exception {
+		Fillo fillo = new Fillo();
+		Connection conn = fillo.getConnection(System.getProperty("user.dir") + File.separator + "DataSheet"
+				+ File.separator + ConnectToMainController.TestDataSheet);
+		String query = "SELECT * FROM Sheet2 WHERE RUNSTATUS='Y' and ApplicationName='" + Process + "'";
+		Recordset recordset = null;
+		int i = 0;
+		try {
+			recordset = conn.executeQuery(query);// here to check the runstatus and module
+
+			while (recordset.next()) {
+				i++;
+			}
+
+			System.out.println("Total sheet_2 row count = " + i);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return i;
 	}
 
 }

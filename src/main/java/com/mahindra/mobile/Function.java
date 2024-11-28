@@ -168,7 +168,36 @@ public class Function extends ConnectToDataSheet {
 					}
 				}
 
+			} else if (Action.equalsIgnoreCase("ScrollUsingCoordinate")) {
+				
+				// Define the start and end points for the swipe
+				int startX = 0; // X coordinate for the start point
+				int startY = 0; // Y coordinate for the start point
+				int endX = 0;   // X coordinate for the end point
+				int endY = 0;   // Y coordinate for the end point
+				
+				String dotArray[] = dataSheet2Value.split("\\.");
+				
+				TouchAction touchAction = new TouchAction(driver);
+				
+				startX = Integer.parseInt(dotArray[0]);
+				startY = Integer.parseInt(dotArray[1]);
+				endX = Integer.parseInt(dotArray[2]);
+				endY = Integer.parseInt(dotArray[3]);
+			
+
+				// Perform the swipe action
+				touchAction.press(PointOption.point(startX, startY))
+				            .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1)))
+				            .moveTo(PointOption.point(endX, endY))
+				            .release()
+				            .perform();
+			} else if(Action.equalsIgnoreCase("ScrollIntoElement")) {
+				driver.executeScript("mobile: scroll", 
+					    "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text(\"" + dataSheet2Value + "\"));");
+
 			}
+
 		} catch (Exception e) {
 //			System.out.println(e);
 		}
