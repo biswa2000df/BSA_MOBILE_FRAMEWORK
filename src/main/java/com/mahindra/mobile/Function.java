@@ -7,11 +7,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Keyboard;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.MobileBy;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.appium.java_client.touch.WaitOptions;
@@ -168,22 +174,37 @@ public class Function extends ConnectToDataSheet {
 					}
 				}
 
-			} else if (Action.equalsIgnoreCase("ScrollUsingCoordinate")) {
+			} else if (Action.contains("ScrollUsingCoordinate")) {
+				
+				
+				 String input = Action;
+
+			        // Remove the part before '(' and after ')'
+			        String numbersPart = input.substring(input.indexOf('(') + 1, input.indexOf(')'));
+
+			        // Split the numbers into an array
+			        String[] values = numbersPart.split(",");
+
+			        // Parse and assign to individual variables
+			        int startX = Integer.parseInt(values[0].trim());
+			        int startY = Integer.parseInt(values[1].trim());
+			        int endX = Integer.parseInt(values[2].trim());
+			        int endY = Integer.parseInt(values[3].trim());
 				
 				// Define the start and end points for the swipe
-				int startX = 0; // X coordinate for the start point
-				int startY = 0; // Y coordinate for the start point
-				int endX = 0;   // X coordinate for the end point
-				int endY = 0;   // Y coordinate for the end point
+//				int startX = 0; // X coordinate for the start point
+//				int startY = 0; // Y coordinate for the start point
+//				int endX = 0;   // X coordinate for the end point
+//				int endY = 0;   // Y coordinate for the end point
 				
-				String dotArray[] = dataSheet2Value.split("\\.");
+//				String dotArray[] = dataSheet2Value.split("\\.");
 				
 				TouchAction touchAction = new TouchAction(driver);
 				
-				startX = Integer.parseInt(dotArray[0]);
-				startY = Integer.parseInt(dotArray[1]);
-				endX = Integer.parseInt(dotArray[2]);
-				endY = Integer.parseInt(dotArray[3]);
+//				startX = Integer.parseInt(dotArray[0]);
+//				startY = Integer.parseInt(dotArray[1]);
+//				endX = Integer.parseInt(dotArray[2]);
+//				endY = Integer.parseInt(dotArray[3]);
 			
 
 				// Perform the swipe action
@@ -192,16 +213,116 @@ public class Function extends ConnectToDataSheet {
 				            .moveTo(PointOption.point(endX, endY))
 				            .release()
 				            .perform();
-			} else if(Action.equalsIgnoreCase("ScrollIntoElement")) {
+			} else if(Action.equalsIgnoreCase("ScrollIntoElementIntoText")) {
 				driver.executeScript("mobile: scroll", 
 					    "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text(\"" + dataSheet2Value + "\"));");
 
+			} else if(Action.equalsIgnoreCase("HideKeyBoard")) {
+				driver.hideKeyboard();
+			}  
+			
+			else if(Action.equalsIgnoreCase("ScrollIntoElementIntoContentDesc")) {
+				MobileElement scrollElement = (MobileElement) driver.findElement(MobileBy.AndroidUIAutomator(
+					    "new UiScrollable(new UiSelector().scrollable(true))" +
+					    ".scrollIntoView(new UiSelector().description(\"" + dataSheet2Value + "\"))"));
 			}
+			
+			else if(Action.equalsIgnoreCase("ScrollIntoElementAndClickUsingContentDesc")) {
+				MobileElement scrollElement = (MobileElement) driver.findElement(MobileBy.AndroidUIAutomator(
+					    "new UiScrollable(new UiSelector().scrollable(true))" +
+					    ".scrollIntoView(new UiSelector().description(\"" + dataSheet2Value + "\"))"));
+				scrollElement.click();
+				
+			}
+			
+			else if(Action.equalsIgnoreCase("ScrollDownLittleBit")) {
+				
+
+					// Get the size of the screen
+					int screenHeight = driver.manage().window().getSize().getHeight();
+					int screenWidth = driver.manage().window().getSize().getWidth();
+//					System.out.println("screenHeight = " + screenHeight);
+//					System.out.println("screenWidth = " + screenWidth);
+					
+					
+					 int startX = screenWidth / 2; // Horizontal center of the screen
+					 int startY = (int) (screenHeight * 0.6); // Start from 60% of the screen height
+					 int endY = (int) (screenHeight * 0.5); // Swipe down to 50% of the screen height
+
+					// Perform the swipe gesture for pull down to refresh
+					TouchAction touchAction = new TouchAction(driver);
+					touchAction
+					    .press(PointOption.point(startX, startY))
+					    .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1))) // Hold for a moment
+					    .moveTo(PointOption.point(startX, endY))
+					    .release()
+					    .perform();
+				
+				
+			}
+			
+			else if(Action.equalsIgnoreCase("ClickOnSearchApplication")) {
+				driver.findElement(By.xpath("//android.view.View[contains(@content-desc,'ID: " + dataSheet2Value + "' )]")).click();
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("UntilScrollElementView")) {
+
+				boolean isElementVisible = false;
+
+				while (!isElementVisible) {
+					try {
+						// Locate the element using content-desc
+						
+						String xpathExpression = "//android.view.View[contains(@content-desc,'" + dataSheet2Value + "')]";
+						MobileElement element = (MobileElement) driver.findElement(By.xpath(xpathExpression));
+						
+						
+						if (element.isDisplayed()) {
+							isElementVisible = true; // Mark as found
+//							element.click(); // Optional: Click the element
+//							System.out.println("Element found and clicked!");
+							break; // Exit the loop immediately
+						}
+					} catch (Exception e) {
+
+						int screenHeight = driver.manage().window().getSize().getHeight();
+						int screenWidth = driver.manage().window().getSize().getWidth();
+
+						int startX = screenWidth / 2;
+						int startY = (int) (screenHeight * 0.6);
+						int endY = (int) (screenHeight * 0.5);
+
+						// Perform the swipe gesture for pull down to refresh
+						TouchAction touchAction = new TouchAction(driver);
+						touchAction.press(PointOption.point(startX, startY))
+								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
+								.moveTo(PointOption.point(startX, endY)).release().perform();
+					}
+
+				}
+
+			}		
+
+			
+			
+			
 
 		} catch (Exception e) {
 //			System.out.println(e);
 		}
 
+	}
+	
+	public static void scrollScreen(AppiumDriver driver) {
+	    TouchAction action = new TouchAction(driver);
+
+	    // Swipe up (adjust the coordinates for your screen resolution)
+	    action.press(PointOption.point(500, 1500)) // Start point (x, y)
+	          .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1))) // Wait time during swipe
+	          .moveTo(PointOption.point(500, 500)) // End point (x, y)
+	          .release()
+	          .perform();
 	}
 
 }

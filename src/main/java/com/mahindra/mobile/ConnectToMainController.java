@@ -291,7 +291,7 @@ public class ConnectToMainController {
 				i++;
 			}
 
-			System.out.println("Total sheet_2 row count = " + i);
+//			System.out.println("Total sheet_2 row count = " + i);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
