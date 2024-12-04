@@ -302,10 +302,47 @@ public class Function extends ConnectToDataSheet {
 
 				}
 
-			}		
+			}
+			
+			else if (Action.equalsIgnoreCase("UntilScrollElementView1")) {
+
+				boolean isElementVisible = false;
+
+				while (!isElementVisible) {
+					try {
+						// Locate the element using content-desc
+						
+						String xpathExpression = PropertyValue;
+						MobileElement element = (MobileElement) driver.findElement(By.xpath(xpathExpression));
+						
+						
+						if (element.isDisplayed()) {
+							isElementVisible = true; // Mark as found
+//							element.click(); // Optional: Click the element
+//							System.out.println("Element found and clicked!");
+							break; // Exit the loop immediately
+						}
+					} catch (Exception e) {
+
+						int screenHeight = driver.manage().window().getSize().getHeight();
+						int screenWidth = driver.manage().window().getSize().getWidth();
+
+						int startX = screenWidth / 2;
+						int startY = (int) (screenHeight * 0.6);
+						int endY = (int) (screenHeight * 0.5);
+
+						// Perform the swipe gesture for pull down to refresh
+						TouchAction touchAction = new TouchAction(driver);
+						touchAction.press(PointOption.point(startX, startY))
+								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
+								.moveTo(PointOption.point(startX, endY)).release().perform();
+					}
+
+				}
+
 
 			
-			
+			}
 			
 
 		} catch (Exception e) {
