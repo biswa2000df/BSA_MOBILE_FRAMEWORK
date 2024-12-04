@@ -462,6 +462,16 @@ public class Function extends ConnectToDataSheet {
 				}
 			}
 			
+			else if(Action.equalsIgnoreCase("Dedupe")) {
+				try {
+				driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Select\"]")).click();
+				driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"Proceed\"]")).click();
+				}catch(Exception e) {
+					driver.findElement(By.xpath("//android.widget.Button[@content-desc=\"No Match\"]")).click();
+				}
+				
+			}
+			
 
 		} catch (Exception e) {
 //			System.out.println(e);
