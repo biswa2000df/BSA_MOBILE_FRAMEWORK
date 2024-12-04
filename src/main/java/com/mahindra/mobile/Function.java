@@ -83,6 +83,10 @@ public class Function extends ConnectToDataSheet {
 			else if (Action.equalsIgnoreCase("SendKeys")) {
 				element.sendKeys(dataSheet2Value);
 			}
+			
+			else if (Action.equalsIgnoreCase("CLEAR")) {
+				element.clear();
+			}
 
 			else if (Action.equalsIgnoreCase("StartDriver")) {
 				MobileConfiguration.mobileConfigurationSheet();
@@ -304,7 +308,7 @@ public class Function extends ConnectToDataSheet {
 
 			}
 			
-			else if (Action.equalsIgnoreCase("UntilScrollElementView1")) {
+			else if (Action.equalsIgnoreCase("UntilScrollDownElementView")) {
 
 				boolean isElementVisible = false;
 
@@ -337,11 +341,125 @@ public class Function extends ConnectToDataSheet {
 								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
 								.moveTo(PointOption.point(startX, endY)).release().perform();
 					}
+				}
+			}
+			
+			else if (Action.equalsIgnoreCase("UntilScrollUpElementView")) {
+
+				boolean isElementVisible = false;
+
+				while (!isElementVisible) {
+					try {
+						// Locate the element using content-desc
+						
+						String xpathExpression = PropertyValue;
+						MobileElement element = (MobileElement) driver.findElement(By.xpath(xpathExpression));
+						
+						
+						if (element.isDisplayed()) {
+							isElementVisible = true; // Mark as found
+//							element.click(); // Optional: Click the element
+//							System.out.println("Element found and clicked!");
+							break; // Exit the loop immediately
+						}
+					} catch (Exception e) {
+
+						int screenHeight = driver.manage().window().getSize().getHeight();
+						int screenWidth = driver.manage().window().getSize().getWidth();
+
+						int startX = screenWidth / 2;
+						int startY = (int) (screenHeight * 0.5);
+						int endY = (int) (screenHeight * 0.6);
+
+						// Perform the swipe gesture for pull down to refresh
+						TouchAction touchAction = new TouchAction(driver);
+						touchAction.press(PointOption.point(startX, startY))
+								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
+								.moveTo(PointOption.point(startX, endY)).release().perform();
+					}
 
 				}
-
-
+			}
 			
+			else if (Action.equalsIgnoreCase("ScrollUpDownElementUnTillVisiable")) {
+
+				boolean isElementVisible = false;
+				boolean scrollDown = true; // Initial scroll direction
+				int scrollAttempts = 0;
+				int maxScrollAttempts = 10; // Set a limit to avoid infinite scrolling
+
+				while (!isElementVisible && scrollAttempts < maxScrollAttempts) {
+				    try {
+				        // Locate the element using content-desc
+				        String xpathExpression = PropertyValue;
+				        MobileElement element = (MobileElement) driver.findElement(By.xpath(xpathExpression));
+
+				        if (element.isDisplayed()) {
+				            isElementVisible = true; // Mark as found
+				            System.out.println("Element found!");
+				            break; // Exit the loop immediately
+				        }
+				    } catch (Exception e) {
+				        // Get screen size
+				        int screenHeight = driver.manage().window().getSize().getHeight();
+				        int screenWidth = driver.manage().window().getSize().getWidth();
+
+				        int startX = screenWidth / 2;
+				        int startY, endY;
+
+				        if (scrollDown) {
+				            // Scroll down
+				            startY = (int) (screenHeight * 0.6);
+				            endY = (int) (screenHeight * 0.5);
+				        } else {
+				            // Scroll up
+				            startY = (int) (screenHeight * 0.5);
+				            endY = (int) (screenHeight * 0.6);
+				        }
+
+				        // Perform the swipe gesture
+				        TouchAction touchAction = new TouchAction(driver);
+				        touchAction.press(PointOption.point(startX, startY))
+				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
+				                .moveTo(PointOption.point(startX, endY)).release().perform();
+
+				        // Update the scroll direction if needed
+				        scrollAttempts++;
+				        if (scrollAttempts >= maxScrollAttempts / 2) {
+				            scrollDown = !scrollDown; // Switch direction after half the attempts
+				        }
+				    }
+				}
+
+				if (!isElementVisible) {
+				    System.out.println("Element not found after scrolling in both directions.");
+				}
+
+				
+			}
+			
+			
+			//custome Function for FOS
+			
+			else if(Action.equalsIgnoreCase("SelectDropDownForSanction")) {
+//				driver.findElement(By.xpath("//android.view.View[@content-desc='1']")).click();
+//				List<WebElement> options = elements;
+//				System.out.println("Number of option Size : " + elements.size());
+				
+
+				for (WebElement option : elements) {
+				    try {
+				        String optionText = option.getAttribute("content-desc");
+//				        System.out.println("Dropdown Value for "+ section + " = " + optionText);
+				        
+				        if (optionText.contains(dataSheet2Value)) {
+				            option.click();
+				            break;
+				        }
+				    } catch (Exception e) {
+//				        System.out.println("Error retrieving content-desc for option: " + e.getMessage());
+				    }
+				}
 			}
 			
 

@@ -51,7 +51,7 @@ public class LocatorManager extends ConnectToDataSheet {
 
 			try {
 				
-				WebDriverWait wait = new WebDriverWait(driver, Long.parseLong(ConnectToMainController.ImplicityWait));
+				WebDriverWait wait = new WebDriverWait(driver, Long.parseLong(ConnectToMainController.ExplicityWait));
 		        wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 				
 				webElement = driver.findElement(by);
