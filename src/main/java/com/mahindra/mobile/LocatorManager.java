@@ -56,7 +56,7 @@ public class LocatorManager extends ConnectToDataSheet {
 				
 				webElement = driver.findElement(by);
 				webElements = driver.findElements(by);
-				ConnectToDataSheet.extractTestData();
+				ConnectToDataSheet.extractTestData();   // call to sheet 2 data
 				
 			} catch (Exception e) {
 				e.printStackTrace();
