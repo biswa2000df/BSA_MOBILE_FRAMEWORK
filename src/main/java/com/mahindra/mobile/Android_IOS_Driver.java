@@ -1,5 +1,6 @@
 package com.mahindra.mobile;
 
+import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -173,8 +174,8 @@ public class Android_IOS_Driver {
 	}
 	
 	public static void InitialisationWebDriverLocal() throws Exception {
-
-		capabilities = new DesiredCapabilities();
+		System.out.println("CHECK FOR DRIVER");
+		
 
 		try {
 			
@@ -186,13 +187,16 @@ public class Android_IOS_Driver {
 //			option.addArguments("--incognito");
 			option.addArguments("--disable-notifications");
 			option.addArguments("--disable-cache");
+	        option.addArguments("--disable-popup-blocking");
 
 			
 			option.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 //			option.addArguments("--headless");
 
+			System.out.println("CHECK FOR DRIVER");
 			driver = new ChromeDriver(option);
 			driver.manage().window().maximize();
+	        driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,10 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -36,6 +39,8 @@ public class Function extends ConnectToDataSheet {
 	public static long executionStartTime;
 	static TouchAction touchAction;
 	public static int randomNumber;
+	public static String getText;
+	public static String applicationID = "MF24120600001319";
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -75,6 +80,27 @@ public class Function extends ConnectToDataSheet {
 			else if (Action.equalsIgnoreCase("BROWSERURL")) {
 				driver.get(dataSheet2Value);
 			}
+			
+			else if (Action.equalsIgnoreCase("SendKeysAndEnterKey")) {
+				element.sendKeys(dataSheet2Value, Keys.ENTER);
+			}
+			
+			else if (Action.equalsIgnoreCase("ApplicationIdSearchOnSFDC")) {
+				element.sendKeys(applicationID, Keys.ENTER);
+			}
+			
+			else if (Action.equalsIgnoreCase("MobileGetText")) {
+				getText = element.getAttribute("content-desc");
+//				System.out.println("gettext============================================================" + getText);
+				
+			}
+			
+			else if (Action.equalsIgnoreCase("UpdateApplicationID")) {
+//				System.out.println("gettext============================================================" + getText);
+				applicationID = getText.substring(getText.indexOf(":") + 2, getText.indexOf("generated!") - 1);
+//			    System.out.println("applicationID===========================================================================>"+applicationID);
+				
+			}
 
 			else if (Action.equalsIgnoreCase("QUIT")) {
 				driver.quit();
@@ -106,6 +132,72 @@ public class Function extends ConnectToDataSheet {
 
 			else if (Action.equalsIgnoreCase("OpenApp_UsingOnlyAppPackage")) {
 				((InteractsWithApps) driver).activateApp(MobileConfiguration.App_PackageName);
+			}
+			
+/////////////// ******************IFRAME*************************//////////////////////////
+
+			else if (Action.contains("FRAMEINDEX")) {
+
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int index = Integer.parseInt(digit);
+
+				driver.switchTo().frame(index);
+				System.out.println("Frame Switch Successfully Using Index");
+			}
+
+			else if (Action.equalsIgnoreCase("FrameSwitchUsingLOCATOR")) {
+				driver.switchTo().frame(element);
+//				System.out.println("Frame Switch Successfully Using Locator");
+			}
+
+			else if (Action.equalsIgnoreCase("DefaultContent")) {
+				driver.switchTo().defaultContent();
+			} 
+			
+			else if (Action.equalsIgnoreCase("PARENTFRAME")) {
+				driver.switchTo().parentFrame();
+			}
+
+			else if (Action.equalsIgnoreCase("FRAMECOUNT")) {
+			List<WebElement> count = elements;
+			System.out.println("Iframe size are   =====================>" + count.size());
+			}
+			
+			else if (Action.equalsIgnoreCase("CLickOnPerticularApplicationID")) {
+				  for(WebElement ele: elements) {
+				    	String applicationNo = ele.getText();
+//				    	System.out.println(applicationNo);
+				    	if(applicationNo.equalsIgnoreCase(applicationID))
+				    		ele.click();
+				    }
+			} 
+			
+			
+///////////////////Page Scrolling Function///////////////////////////
+
+			else if (Action.contains("ScrollDown")) {
+
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int Scroll = Integer.parseInt(digit);
+
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
+			}
+
+			else if (Action.contains("ScrollUp")) {
+
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int Scroll = Integer.parseInt(digit);
+
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
+			}
+
+			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
+																		// is found
+
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].scrollIntoView();", element);
 			}
 
 			else if (Action.contains("WAIT")) {
@@ -275,6 +367,10 @@ public class Function extends ConnectToDataSheet {
 					    .perform();
 				
 				
+			}
+			
+			else if(Action.equalsIgnoreCase("SearchApplication")) {
+				element.sendKeys(applicationID);
 			}
 			
 			else if(Action.equalsIgnoreCase("ClickOnSearchApplication")) {
@@ -491,15 +587,20 @@ public class Function extends ConnectToDataSheet {
 
 	}
 	
-	public static void scrollScreen(AppiumDriver driver) {
-	    TouchAction action = new TouchAction(driver);
+	
+	public static String getOnlyDigit(String Action) { ///////// inside the bracket get only the digit
 
-	    // Swipe up (adjust the coordinates for your screen resolution)
-	    action.press(PointOption.point(500, 1500)) // Start point (x, y)
-	          .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1))) // Wait time during swipe
-	          .moveTo(PointOption.point(500, 500)) // End point (x, y)
-	          .release()
-	          .perform();
+		String digit = null;
+		String string = Action;
+		Pattern pattern = Pattern.compile("\\((\\d+)\\)"); // Matches digits enclosed in parentheses
+		Matcher matcher = pattern.matcher(string);
+
+		if (matcher.find()) {
+			digit = matcher.group(1); // Extracts the digit(s) within the parentheses
+
+		}
+		return digit;
+
 	}
 
 }
