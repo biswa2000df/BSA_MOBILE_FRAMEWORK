@@ -12,10 +12,14 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.HidesKeyboard;
+import io.appium.java_client.InteractsWithApps;
 import io.appium.java_client.MobileBy;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.PerformsTouchActions;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.nativekey.AndroidKey;
@@ -63,13 +67,21 @@ public class Function extends ConnectToDataSheet {
 			else if (Action.equalsIgnoreCase("InstallAndStartApplication")) {
 				MobileConfiguration.mobileConfigurationSheet();
 			}
+			
+			else if (Action.equalsIgnoreCase("STARTBROWSER")) {
+				InitialisationWebDriverLocal();
+			}
+			
+			else if (Action.equalsIgnoreCase("BROWSERURL")) {
+				driver.get(dataSheet2Value);
+			}
 
 			else if (Action.equalsIgnoreCase("QUIT")) {
 				driver.quit();
 			}
 
 			else if (Action.equalsIgnoreCase("KeyBoardSendKeys")) {
-				driver.getKeyboard().sendKeys(dataSheet2Value);
+				((RemoteWebDriver) driver).getKeyboard().sendKeys(dataSheet2Value);
 			}
 
 			else if (Action.equalsIgnoreCase("CLICK")) {
@@ -93,7 +105,7 @@ public class Function extends ConnectToDataSheet {
 			}
 
 			else if (Action.equalsIgnoreCase("OpenApp_UsingOnlyAppPackage")) {
-				driver.activateApp(MobileConfiguration.App_PackageName);
+				((InteractsWithApps) driver).activateApp(MobileConfiguration.App_PackageName);
 			}
 
 			else if (Action.contains("WAIT")) {
@@ -144,7 +156,7 @@ public class Function extends ConnectToDataSheet {
 				int endY = (int) (screenHeight * 0.3); // Swipe down to 30% of the screen height
 
 				// Perform the swipe gesture for pull down to refresh
-			    touchAction = new TouchAction(driver);
+			    touchAction = new TouchAction((PerformsTouchActions) driver);
 				touchAction
 				    .press(PointOption.point(startX, startY))
 				    .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(3))) // Hold for a moment
@@ -203,7 +215,7 @@ public class Function extends ConnectToDataSheet {
 				
 //				String dotArray[] = dataSheet2Value.split("\\.");
 				
-				TouchAction touchAction = new TouchAction(driver);
+				TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 				
 //				startX = Integer.parseInt(dotArray[0]);
 //				startY = Integer.parseInt(dotArray[1]);
@@ -218,11 +230,11 @@ public class Function extends ConnectToDataSheet {
 				            .release()
 				            .perform();
 			} else if(Action.equalsIgnoreCase("ScrollIntoElementIntoText")) {
-				driver.executeScript("mobile: scroll", 
+				((JavascriptExecutor) driver).executeScript("mobile: scroll", 
 					    "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text(\"" + dataSheet2Value + "\"));");
 
 			} else if(Action.equalsIgnoreCase("HideKeyBoard")) {
-				driver.hideKeyboard();
+				((HidesKeyboard) driver).hideKeyboard();
 			}  
 			
 			else if(Action.equalsIgnoreCase("ScrollIntoElementIntoContentDesc")) {
@@ -254,7 +266,7 @@ public class Function extends ConnectToDataSheet {
 					 int endY = (int) (screenHeight * 0.5); // Swipe down to 50% of the screen height
 
 					// Perform the swipe gesture for pull down to refresh
-					TouchAction touchAction = new TouchAction(driver);
+					TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 					touchAction
 					    .press(PointOption.point(startX, startY))
 					    .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(1))) // Hold for a moment
@@ -298,7 +310,7 @@ public class Function extends ConnectToDataSheet {
 						int endY = (int) (screenHeight * 0.5);
 
 						// Perform the swipe gesture for pull down to refresh
-						TouchAction touchAction = new TouchAction(driver);
+						TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 						touchAction.press(PointOption.point(startX, startY))
 								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
 								.moveTo(PointOption.point(startX, endY)).release().perform();
@@ -336,7 +348,7 @@ public class Function extends ConnectToDataSheet {
 						int endY = (int) (screenHeight * 0.5);
 
 						// Perform the swipe gesture for pull down to refresh
-						TouchAction touchAction = new TouchAction(driver);
+						TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 						touchAction.press(PointOption.point(startX, startY))
 								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
 								.moveTo(PointOption.point(startX, endY)).release().perform();
@@ -372,7 +384,7 @@ public class Function extends ConnectToDataSheet {
 						int endY = (int) (screenHeight * 0.6);
 
 						// Perform the swipe gesture for pull down to refresh
-						TouchAction touchAction = new TouchAction(driver);
+						TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 						touchAction.press(PointOption.point(startX, startY))
 								.waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
 								.moveTo(PointOption.point(startX, endY)).release().perform();
@@ -418,7 +430,7 @@ public class Function extends ConnectToDataSheet {
 				        }
 
 				        // Perform the swipe gesture
-				        TouchAction touchAction = new TouchAction(driver);
+				        TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
 				        touchAction.press(PointOption.point(startX, startY))
 				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
 				                .moveTo(PointOption.point(startX, endY)).release().perform();

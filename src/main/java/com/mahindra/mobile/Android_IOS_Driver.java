@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.PageLoadStrategy;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import io.appium.java_client.AppiumDriver;
@@ -15,7 +19,7 @@ import io.appium.java_client.ios.IOSDriver;
 
 public class Android_IOS_Driver {
 
-	static AppiumDriver driver;
+	static WebDriver driver;
 	static DesiredCapabilities capabilities;
 	static URL url;
 	static Map<String, Object> browserstackOptions;
@@ -167,5 +171,36 @@ public class Android_IOS_Driver {
 	
 
 	}
+	
+	public static void InitialisationWebDriverLocal() throws Exception {
+
+		capabilities = new DesiredCapabilities();
+
+		try {
+			
+			System.setProperty("webdriver.chrome.driver", "C:\\Users\\biswa\\Downloads\\chromedriver-win64 (10)\\chromedriver-win64\\chromedriver.exe");
+
+			ChromeOptions option = new ChromeOptions();
+			option.addArguments("--remote-allow-origins=*");
+			option.addArguments("--no-sandbox");
+//			option.addArguments("--incognito");
+			option.addArguments("--disable-notifications");
+			option.addArguments("--disable-cache");
+
+			
+			option.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+//			option.addArguments("--headless");
+
+			driver = new ChromeDriver(option);
+			driver.manage().window().maximize();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
+	
+
+	}
+
 
 }
