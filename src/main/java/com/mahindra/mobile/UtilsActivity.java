@@ -289,8 +289,6 @@ public class UtilsActivity extends ConnectToDataSheet {
 	}
 	
 	
-
-	
 	
 
 }

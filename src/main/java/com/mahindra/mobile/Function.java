@@ -16,6 +16,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.HidesKeyboard;
@@ -40,7 +42,7 @@ public class Function extends ConnectToDataSheet {
 	static TouchAction touchAction;
 	public static int randomNumber;
 	public static String getText;
-	public static String applicationID = "MF24120600001319";
+	public static String applicationID = "MF24120600002178";
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -98,7 +100,7 @@ public class Function extends ConnectToDataSheet {
 			else if (Action.equalsIgnoreCase("UpdateApplicationID")) {
 //				System.out.println("gettext============================================================" + getText);
 				applicationID = getText.substring(getText.indexOf(":") + 2, getText.indexOf("generated!") - 1);
-//			    System.out.println("applicationID===========================================================================>"+applicationID);
+			    System.out.println("applicationID===========================================================================>"+applicationID);
 				
 			}
 
@@ -164,41 +166,20 @@ public class Function extends ConnectToDataSheet {
 			}
 			
 			else if (Action.equalsIgnoreCase("CLickOnPerticularApplicationID")) {
-				  for(WebElement ele: elements) {
+			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("==================================================="+Application_Elements.size());
+				  for(WebElement ele: Application_Elements) {
 				    	String applicationNo = ele.getText();
-//				    	System.out.println(applicationNo);
+				    	System.out.println(applicationNo);
 				    	if(applicationNo.equalsIgnoreCase(applicationID))
 				    		ele.click();
 				    }
 			} 
 			
+//			
+
 			
-///////////////////Page Scrolling Function///////////////////////////
-
-			else if (Action.contains("ScrollDown")) {
-
-				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
-				int Scroll = Integer.parseInt(digit);
-
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
-			}
-
-			else if (Action.contains("ScrollUp")) {
-
-				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
-				int Scroll = Integer.parseInt(digit);
-
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
-			}
-
-			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
-																		// is found
-
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].scrollIntoView();", element);
-			}
+			
 
 			else if (Action.contains("WAIT")) {
 				String input = Action;
@@ -213,6 +194,30 @@ public class Function extends ConnectToDataSheet {
 
 
 			}
+			
+			
+			
+			else if (Action.equalsIgnoreCase("SFDC_SearchBar")) {
+				
+				WebDriverWait wait = new WebDriverWait(driver, 5);
+				try {
+					
+					wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search...']"))).sendKeys(applicationID,
+							Keys.ENTER);
+				} catch (Exception e) {
+					try {
+						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Approvals and more...']"))).sendKeys(applicationID,
+								Keys.ENTER);
+					
+					} catch (Exception e1) {
+
+						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Loan Applications and more...']"))).sendKeys(applicationID,
+								Keys.ENTER);
+					}
+				}
+			}
+			
+			
 			
 			else if (Action.contains("GenerateRandomNumber")) {
 				 int numDigits = Integer.parseInt(dataSheet2Value);
@@ -579,6 +584,33 @@ public class Function extends ConnectToDataSheet {
 				}
 				
 			}
+			
+/////////////////////Page Scrolling Function///////////////////////////
+
+	else if (Action.contains("ScrollDown")) {
+
+		String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+		int Scroll = Integer.parseInt(digit);
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
+	}
+
+	else if (Action.contains("ScrollUp")) {
+
+		String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+		int Scroll = Integer.parseInt(digit);
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
+	}
+
+	else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
+																// is found
+
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView();", element);
+	}
 			
 
 		} catch (Exception e) {

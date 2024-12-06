@@ -1,6 +1,5 @@
 package com.mahindra.mobile;
 
-import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
