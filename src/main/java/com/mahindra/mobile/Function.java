@@ -42,7 +42,7 @@ public class Function extends ConnectToDataSheet {
 	static TouchAction touchAction;
 	public static int randomNumber;
 	public static String getText;
-	public static String applicationID = "MF24120600002178";
+	public static String applicationID = "MF24120700005107";
 
 	Function() {
 		element = LocatorManager.webElement;
@@ -166,6 +166,7 @@ public class Function extends ConnectToDataSheet {
 			}
 			
 			else if (Action.equalsIgnoreCase("CLickOnPerticularApplicationID")) {
+				Thread.sleep(10000);
 			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
 				System.out.println("==================================================="+Application_Elements.size());
 				  for(WebElement ele: Application_Elements) {
@@ -379,7 +380,8 @@ public class Function extends ConnectToDataSheet {
 			}
 			
 			else if(Action.equalsIgnoreCase("ClickOnSearchApplication")) {
-				driver.findElement(By.xpath("//android.view.View[contains(@content-desc,'ID: " + dataSheet2Value + "' )]")).click();
+//				driver.findElement(By.xpath("//android.view.View[contains(@content-desc,'ID: " + dataSheet2Value + "' )]")).click();
+				driver.findElement(By.xpath("//android.view.View[contains(@content-desc,'ID: " + applicationID + "' )]")).click();
 			}
 			
 			
@@ -587,30 +589,115 @@ public class Function extends ConnectToDataSheet {
 			
 /////////////////////Page Scrolling Function///////////////////////////
 
-	else if (Action.contains("ScrollDown")) {
+			else if (Action.contains("ScrollDown")) {
 
-		String digit = getOnlyDigit(Action); // call the getdigit method to get the data
-		int Scroll = Integer.parseInt(digit);
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int Scroll = Integer.parseInt(digit);
 
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
-	}
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
+			}
 
-	else if (Action.contains("ScrollUp")) {
+			else if (Action.contains("ScrollUp")) {
 
-		String digit = getOnlyDigit(Action); // call the getdigit method to get the data
-		int Scroll = Integer.parseInt(digit);
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int Scroll = Integer.parseInt(digit);
 
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
-	}
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
+			}
 
-	else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
-																// is found
+			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
+																		// is found
 
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		js.executeScript("arguments[0].scrollIntoView();", element);
-	}
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].scrollIntoView();", element);
+			}
+			
+			
+			
+			else if (Action.equalsIgnoreCase("ClickOnCPC1stTouchPointCase")) {
+				Thread.sleep(2000);
+			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("==================================================="+Application_Elements.size());
+				  for(WebElement ele: Application_Elements) {
+				    	String applicationStage = ele.getText();
+				    	System.out.println(applicationStage);
+				    	if(applicationStage.equalsIgnoreCase( "MF24120700003849 - " + dataSheet2Value)) {
+				    		ele.click();
+				    		break;
+				    	}
+				    	
+				    }
+			} 
+			
+			else if (Action.equalsIgnoreCase("NavigateBack")) {
+				driver.navigate().back();
+			}
+			
+			else if (Action.equalsIgnoreCase("Refresh")) {
+				driver.navigate().refresh();
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("SFDC_SearchBar1")) {
+				
+				WebDriverWait wait = new WebDriverWait(driver, 5);
+				try {
+					
+					wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Cases and more...']"))).sendKeys(dataSheet2Value,
+							Keys.ENTER);
+					
+				} catch (Exception e) {
+					try {
+						
+						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search...']"))).sendKeys(dataSheet2Value,
+								Keys.ENTER);
+						
+					
+					} catch (Exception e1) {
+
+					
+						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Approvals and more...']"))).sendKeys(dataSheet2Value,
+								Keys.ENTER);
+					}
+				}
+			}
+			
+			else if (Action.equalsIgnoreCase("EditSignGetText")) {
+				
+				Thread.sleep(5000);
+				
+				demoTesting.scroll(driver);
+				
+				Thread.sleep(15000);
+			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("==================================================="+Application_Elements.size());
+				int i=0;
+				  for(WebElement ele: Application_Elements) {
+					  i++;
+				    	String applicationStage = ele.getText();
+				    	System.out.println(applicationStage);
+				    	if(applicationStage.equalsIgnoreCase( "Cash Flow Details Send Back")) {
+				    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_stacked']/dd)[" + i + "]/div/button"));
+				    		editButton.click();
+				    		break;
+				    	}
+				    	
+				    }
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 
 		} catch (Exception e) {
@@ -634,5 +721,8 @@ public class Function extends ConnectToDataSheet {
 		return digit;
 
 	}
+	
+	
+	
 
 }

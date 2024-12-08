@@ -173,7 +173,6 @@ public class Android_IOS_Driver {
 	}
 	
 	public static void InitialisationWebDriverLocal() throws Exception {
-		System.out.println("CHECK FOR DRIVER");
 		
 
 		try {
@@ -192,7 +191,6 @@ public class Android_IOS_Driver {
 			option.setPageLoadStrategy(PageLoadStrategy.NORMAL);
 //			option.addArguments("--headless");
 
-			System.out.println("CHECK FOR DRIVER");
 			driver = new ChromeDriver(option);
 			driver.manage().window().maximize();
 	        driver.manage().timeouts().implicitlyWait(Long.parseLong(ConnectToMainController.ImplicityWait), TimeUnit.SECONDS);
