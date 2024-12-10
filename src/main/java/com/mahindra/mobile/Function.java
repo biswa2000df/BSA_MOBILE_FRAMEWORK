@@ -14,6 +14,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -42,6 +43,8 @@ public class Function extends ConnectToDataSheet {
 	static TouchAction touchAction;
 	public static int randomNumber;
 	public static String getText;
+	public static Actions act ;
+	
 	public static String applicationID = "MF24120700005107";
 
 	Function() {
@@ -85,6 +88,10 @@ public class Function extends ConnectToDataSheet {
 			
 			else if (Action.equalsIgnoreCase("SendKeysAndEnterKey")) {
 				element.sendKeys(dataSheet2Value, Keys.ENTER);
+			}
+			
+			else if (Action.equalsIgnoreCase("ElementWithEnterKey")) {
+				element.sendKeys(Keys.ENTER);
 			}
 			
 			else if (Action.equalsIgnoreCase("ApplicationIdSearchOnSFDC")) {
@@ -594,8 +601,7 @@ public class Function extends ConnectToDataSheet {
 				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
 				int Scroll = Integer.parseInt(digit);
 
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("window.scrollBy(0, " + Scroll + ")", "");
+				demoTesting.scrollDown(driver, Scroll);
 			}
 
 			else if (Action.contains("ScrollUp")) {
@@ -603,15 +609,22 @@ public class Function extends ConnectToDataSheet {
 				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
 				int Scroll = Integer.parseInt(digit);
 
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("window.scrollBy(0, " + -Scroll + ")", "");
+				demoTesting.scrollUp(driver, Scroll);
 			}
 
 			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
 																		// is found
 
-				JavascriptExecutor js = (JavascriptExecutor) driver;
-				js.executeScript("arguments[0].scrollIntoView();", element);
+				demoTesting.ScrollwebElementUntilVisible(driver, element);
+			}
+			
+			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
+				// is found
+				
+				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
+				int Scroll = Integer.parseInt(digit);
+
+				demoTesting.ScrollUpAndDownwebElementUntilVisible(driver, PropertyValue, Scroll);
 			}
 			
 			
@@ -623,7 +636,8 @@ public class Function extends ConnectToDataSheet {
 				  for(WebElement ele: Application_Elements) {
 				    	String applicationStage = ele.getText();
 				    	System.out.println(applicationStage);
-				    	if(applicationStage.equalsIgnoreCase( "MF24120700003849 - " + dataSheet2Value)) {
+//				    	if(applicationStage.equalsIgnoreCase( "MF24120700003849 - " + dataSheet2Value)) {
+				    	if(applicationStage.contains( dataSheet2Value)) {
 				    		ele.click();
 				    		break;
 				    	}
@@ -642,35 +656,33 @@ public class Function extends ConnectToDataSheet {
 			
 			else if (Action.equalsIgnoreCase("SFDC_SearchBar1")) {
 				
-				WebDriverWait wait = new WebDriverWait(driver, 5);
+				Thread.sleep(5000);
 				try {
 					
-					wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Cases and more...']"))).sendKeys(dataSheet2Value,
+					driver.findElement(By.xpath("//input[@placeholder='Search...']")).sendKeys(dataSheet2Value,
 							Keys.ENTER);
+					
 					
 				} catch (Exception e) {
 					try {
 						
-						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search...']"))).sendKeys(dataSheet2Value,
+						driver.findElement(By.xpath("//input[@placeholder='Search Cases and more...']")).sendKeys(dataSheet2Value,
 								Keys.ENTER);
 						
 					
 					} catch (Exception e1) {
 
 					
-						wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@placeholder='Search Approvals and more...']"))).sendKeys(dataSheet2Value,
+						driver.findElement(By.xpath("//input[@placeholder='Search Approvals and more...']")).sendKeys(dataSheet2Value,
 								Keys.ENTER);
 					}
 				}
 			}
 			
-			else if (Action.equalsIgnoreCase("EditSignGetText")) {
+			else if (Action.equalsIgnoreCase("ClickOnEditSign")) {
 				
-				Thread.sleep(5000);
-				
-				demoTesting.scroll(driver);
-				
-				Thread.sleep(15000);
+//				Thread.sleep(5000);
+			
 			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
 				System.out.println("==================================================="+Application_Elements.size());
 				int i=0;
@@ -678,13 +690,40 @@ public class Function extends ConnectToDataSheet {
 					  i++;
 				    	String applicationStage = ele.getText();
 				    	System.out.println(applicationStage);
-				    	if(applicationStage.equalsIgnoreCase( "Cash Flow Details Send Back")) {
+				    	if(applicationStage.equalsIgnoreCase( dataSheet2Value )) {
+				    		
 				    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_stacked']/dd)[" + i + "]/div/button"));
 				    		editButton.click();
 				    		break;
 				    	}
 				    	
 				    }
+			}
+			
+			else if (Action.equalsIgnoreCase("ClickOnLeftSideEditSign")) {
+
+
+				List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("===================================================" + Application_Elements.size());
+				int i = 0;
+				for (WebElement ele : Application_Elements) {
+					i++;
+					String applicationStage = ele.getText();
+					System.out.println(applicationStage);
+					if (applicationStage.equalsIgnoreCase(dataSheet2Value)) {
+
+						WebElement editButton = driver.findElement(By.xpath("(//div[@class='slds-grid slds-m-left_x-large slds-p-around_xxx-small slds-form-element slds-form-element_edit slds-form-element_readonly slds-hint-parent']//div[@class='slds-col slds-size_1-of-8'])[" + i + "]/button/lightning-icon"));
+						editButton.click();
+						break;
+					}
+
+				}
+			}
+			
+			else if (Action.equalsIgnoreCase("MOUSEHOVER")) {
+				 act = new Actions(driver);
+				act.moveToElement(element).build().perform();
+
 			}
 			
 			
