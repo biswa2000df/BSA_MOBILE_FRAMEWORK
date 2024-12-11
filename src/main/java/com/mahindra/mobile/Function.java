@@ -44,6 +44,7 @@ public class Function extends ConnectToDataSheet {
 	public static int randomNumber;
 	public static String getText;
 	public static Actions act ;
+	public static int cpcProceedButton = 0;
 	
 	public static String applicationID = "MF24120700005107";
 
@@ -505,7 +506,7 @@ public class Function extends ConnectToDataSheet {
 			
 			else if (Action.equalsIgnoreCase("ScrollUpDownElementUnTillVisiable")) {
 
-				boolean isElementVisible = false;
+		/*		boolean isElementVisible = false;
 				boolean scrollDown = true; // Initial scroll direction
 				int scrollAttempts = 0;
 				int maxScrollAttempts = 10; // Set a limit to avoid infinite scrolling
@@ -555,10 +556,64 @@ public class Function extends ConnectToDataSheet {
 
 				if (!isElementVisible) {
 				    System.out.println("Element not found after scrolling in both directions.");
+				}*/
+				
+				
+				 boolean elementIsVisible = false;
+				    int currentScrollCount = 0;
+				    int maxScrollCount = 12;
+
+				    while (!elementIsVisible && currentScrollCount < maxScrollCount) {
+				        try {
+				            MobileElement element = (MobileElement) driver.findElement(By.xpath(PropertyValue));
+				            if (element.isDisplayed()) {
+				                elementIsVisible = true;
+				                System.out.println("Element is visible!");
+				                break;
+				            }
+				        } catch (Exception e) {
+				            // Element not found yet, continue scrolling
+				        }
+
+				        // Get screen dimensions
+				        int screenHeight = driver.manage().window().getSize().getHeight();
+				        int screenWidth = driver.manage().window().getSize().getWidth();
+
+				        int startX = screenWidth / 2;
+				        int startY;
+				        int endY;
+
+				        if (currentScrollCount < maxScrollCount / 2) {
+				            // Scroll down
+				            startY = (int) (screenHeight * 0.6);
+				            endY = (int) (screenHeight * 0.5);
+				        } else {
+				            // Scroll up
+				            startY = (int) (screenHeight * 0.5);
+				            endY = (int) (screenHeight * 0.6);
+				        }
+
+				        // Perform the swipe gesture
+				        TouchAction touchAction = new TouchAction((PerformsTouchActions)driver);
+				        touchAction.press(PointOption.point(startX, startY))
+				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+				                .moveTo(PointOption.point(startX, endY))
+				                .release()
+				                .perform();
+				        
+				       
+
+				        currentScrollCount++;
+				    }
+
+				    if (!elementIsVisible) {
+				        System.out.println("Ohh Sorry... Scrolling limit completed. Element not found.");
+				    }
 				}
 
+
 				
-			}
+			
 			
 			
 			//custome Function for FOS
@@ -636,8 +691,8 @@ public class Function extends ConnectToDataSheet {
 				  for(WebElement ele: Application_Elements) {
 				    	String applicationStage = ele.getText();
 				    	System.out.println(applicationStage);
-//				    	if(applicationStage.equalsIgnoreCase( "MF24120700003849 - " + dataSheet2Value)) {
-				    	if(applicationStage.contains( dataSheet2Value)) {
+				    	if(applicationStage.equalsIgnoreCase( applicationID + " - " + dataSheet2Value)) {
+//				    	if(applicationStage.contains( dataSheet2Value)) {
 				    		ele.click();
 				    		break;
 				    	}
@@ -655,6 +710,8 @@ public class Function extends ConnectToDataSheet {
 			
 			
 			else if (Action.equalsIgnoreCase("SFDC_SearchBar1")) {
+				
+				applicationID = dataSheet2Value;
 				
 				Thread.sleep(5000);
 				try {
@@ -695,10 +752,39 @@ public class Function extends ConnectToDataSheet {
 				    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_stacked']/dd)[" + i + "]/div/button"));
 				    		editButton.click();
 				    		break;
+				    		
+				    		//(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[10]/div/button
+				    	
+				    		//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dt/div
 				    	}
 				    	
 				    }
 			}
+			
+			
+			else if (Action.equalsIgnoreCase("ClickOnEditSignForQCUser")) {
+				
+//				Thread.sleep(5000);
+			
+			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("==================================================="+Application_Elements.size());
+				int i=0;
+				  for(WebElement ele: Application_Elements) {
+					  i++;
+				    	String applicationStage = ele.getText();
+				    	System.out.println(applicationStage);
+				    	if(applicationStage.equalsIgnoreCase( dataSheet2Value )) {
+				    		
+				    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[" + i + "]/div/button"));
+				    		editButton.click();
+				    		break;
+				    		
+				    	
+				    	}
+				    	
+				    }
+			}
+			
 			
 			else if (Action.equalsIgnoreCase("ClickOnLeftSideEditSign")) {
 
@@ -724,6 +810,54 @@ public class Function extends ConnectToDataSheet {
 				 act = new Actions(driver);
 				act.moveToElement(element).build().perform();
 
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("SelectCPCField")) {
+				try {
+					driver.findElement(By.xpath( "(" + PropertyValue + ")[2]" )).click();
+					System.out.println("Indexing - 2 ");
+				}catch(Exception e){
+					driver.findElement(By.xpath( "(" + PropertyValue + ")[1]" )).click();
+					System.out.println("Indexing - 1 ");
+				}
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("CPCProceedButton")) {
+				cpcProceedButton = 0;
+				try {
+					driver.findElement(By.xpath( "(" + PropertyValue + ")[2]" )).click();
+					cpcProceedButton = 2;
+					System.out.println("Indexing - 2 ");
+				}catch(Exception e){
+					driver.findElement(By.xpath( "(" + PropertyValue + ")[1]" )).click();
+					cpcProceedButton = 1;
+					System.out.println("Indexing - 1 ");
+				}
+
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("CPCDedupeProceedButton")) {
+				
+				if (cpcProceedButton == 2) {
+					try {
+						driver.findElement(By.xpath("(" + PropertyValue + ")[4]")).click();
+						System.out.println("Indexing - 4 ");
+					} catch (Exception e) {
+						driver.findElement(By.xpath("(" + PropertyValue + ")[5]")).click();
+						System.out.println("Indexing - 5 ");
+					}
+				}else if(cpcProceedButton == 1) {
+					try {
+						driver.findElement(By.xpath( "(" + PropertyValue + ")[3]" )).click();
+						System.out.println("Indexing - 3 ");
+					}catch(Exception e){
+						driver.findElement(By.xpath( "(" + PropertyValue + ")[2]" )).click();
+						System.out.println("Indexing - 2 ");
+					}
+				}
 			}
 			
 			
