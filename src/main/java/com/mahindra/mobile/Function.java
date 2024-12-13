@@ -336,17 +336,21 @@ public class Function extends ConnectToDataSheet {
 				            .release()
 				            .perform();
 			} else if(Action.equalsIgnoreCase("ScrollIntoElementIntoText")) {
-				((JavascriptExecutor) driver).executeScript("mobile: scroll", 
-					    "new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text(\"" + dataSheet2Value + "\"));");
-
+				((AndroidDriver)driver).findElementByAndroidUIAutomator(
+					    "new UiScrollable(new UiSelector().scrollable(true)).setAsVerticalList().scrollForward()"
+					    + ".scrollIntoView(new UiSelector().description(\"" + dataSheet2Value + "\"))")
+					.click();
+				
 			} else if(Action.equalsIgnoreCase("HideKeyBoard")) {
 				((HidesKeyboard) driver).hideKeyboard();
 			}  
 			
 			else if(Action.equalsIgnoreCase("ScrollIntoElementIntoContentDesc")) {
 				MobileElement scrollElement = (MobileElement) driver.findElement(MobileBy.AndroidUIAutomator(
-					    "new UiScrollable(new UiSelector().scrollable(true))" +
+					    "new UiScrollable(new UiSelector().scrollable(true)).setAsVerticalList().scrollForward()" +
 					    ".scrollIntoView(new UiSelector().description(\"" + dataSheet2Value + "\"))"));
+				Thread.sleep(2000);
+				scrollElement.click();
 			}
 			
 			else if(Action.equalsIgnoreCase("ScrollIntoElementAndClickUsingContentDesc")) {
@@ -506,60 +510,7 @@ public class Function extends ConnectToDataSheet {
 			
 			else if (Action.equalsIgnoreCase("ScrollUpDownElementUnTillVisiable")) {
 
-		/*		boolean isElementVisible = false;
-				boolean scrollDown = true; // Initial scroll direction
-				int scrollAttempts = 0;
-				int maxScrollAttempts = 10; // Set a limit to avoid infinite scrolling
-
-				while (!isElementVisible && scrollAttempts < maxScrollAttempts) {
-				    try {
-				        // Locate the element using content-desc
-				        String xpathExpression = PropertyValue;
-				        MobileElement element = (MobileElement) driver.findElement(By.xpath(xpathExpression));
-
-				        if (element.isDisplayed()) {
-				            isElementVisible = true; // Mark as found
-				            System.out.println("Element found!");
-				            break; // Exit the loop immediately
-				        }
-				    } catch (Exception e) {
-				        // Get screen size
-				        int screenHeight = driver.manage().window().getSize().getHeight();
-				        int screenWidth = driver.manage().window().getSize().getWidth();
-
-				        int startX = screenWidth / 2;
-				        int startY, endY;
-
-				        if (scrollDown) {
-				            // Scroll down
-				            startY = (int) (screenHeight * 0.6);
-				            endY = (int) (screenHeight * 0.5);
-				        } else {
-				            // Scroll up
-				            startY = (int) (screenHeight * 0.5);
-				            endY = (int) (screenHeight * 0.6);
-				        }
-
-				        // Perform the swipe gesture
-				        TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
-				        touchAction.press(PointOption.point(startX, startY))
-				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300))) // Hold for a moment
-				                .moveTo(PointOption.point(startX, endY)).release().perform();
-
-				        // Update the scroll direction if needed
-				        scrollAttempts++;
-				        if (scrollAttempts >= maxScrollAttempts / 2) {
-				            scrollDown = !scrollDown; // Switch direction after half the attempts
-				        }
-				    }
-				}
-
-				if (!isElementVisible) {
-				    System.out.println("Element not found after scrolling in both directions.");
-				}*/
-				
-				
-				 boolean elementIsVisible = false;
+			/*	 boolean elementIsVisible = false;
 				    int currentScrollCount = 0;
 				    int maxScrollCount = 12;
 
@@ -594,6 +545,78 @@ public class Function extends ConnectToDataSheet {
 				        }
 
 				        // Perform the swipe gesture
+				        TouchAction touchAction = new TouchAction((PerformsTouchActions)driver);
+				        touchAction.press(PointOption.point(startX, startY))
+				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+				                .moveTo(PointOption.point(startX, endY))
+				                .release()
+				                .perform();
+				        
+				       
+
+				        currentScrollCount++;
+				    }
+
+				    if (!elementIsVisible) {
+				        System.out.println("Ohh Sorry... Scrolling limit completed. Element not found.");
+				    }*/
+				
+				 boolean elementIsVisible = false;
+				    int currentScrollCount = 0;
+				    int maxScrollCount = 12;
+
+				    while (!elementIsVisible && currentScrollCount < maxScrollCount) {
+				        try {
+				            MobileElement element = (MobileElement) driver.findElement(By.xpath(PropertyValue));
+				            int screenHeight = driver.manage().window().getSize().getHeight();
+				            int screenWidth = driver.manage().window().getSize().getWidth();
+				            int elementY = element.getLocation().getY();
+
+				            if (element.isDisplayed()) {
+				            	elementIsVisible = true;
+				                if (screenHeight - elementY <= screenHeight * 0.3) {
+				                    // Element is too close to the bottom, scroll down slightly
+				                    int scrollStartY = (int) (screenHeight * 0.6);
+				                    int scrollEndY = (int) (screenHeight * 0.5);
+
+				                    TouchAction touchAction = new TouchAction((PerformsTouchActions)driver);
+				                    touchAction.press(PointOption.point(screenWidth / 2, scrollStartY))
+				                            .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+				                            .moveTo(PointOption.point(screenWidth / 2, scrollEndY))
+				                            .release()
+				                            .perform();
+				                } else {
+				                    // Element is at a good position, mark as visible
+				                    elementIsVisible = true;
+				                    System.out.println("Element is visible and positioned correctly!");
+				                    break;
+				                }
+				                break;
+				            }
+				            
+				        } catch (Exception e) {
+				            // Element not found yet, continue scrolling
+				        }
+
+				        // Get screen dimensions
+				        int screenHeight = driver.manage().window().getSize().getHeight();
+				        int screenWidth = driver.manage().window().getSize().getWidth();
+
+				        int startX = screenWidth / 2;
+				        int startY;
+				        int endY;
+
+				        if (currentScrollCount < maxScrollCount / 2) {
+				            // Scroll down
+				            startY = (int) (screenHeight * 0.6);
+				            endY = (int) (screenHeight * 0.5);
+				        } else {
+				            // Scroll up
+				            startY = (int) (screenHeight * 0.5);
+				            endY = (int) (screenHeight * 0.6);
+				        }
+
+										        // Perform the swipe gesture
 				        TouchAction touchAction = new TouchAction((PerformsTouchActions)driver);
 				        touchAction.press(PointOption.point(startX, startY))
 				                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
@@ -656,7 +679,7 @@ public class Function extends ConnectToDataSheet {
 				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
 				int Scroll = Integer.parseInt(digit);
 
-				demoTesting.scrollDown(driver, Scroll);
+				WebScrolling.scrollDown(driver, Scroll);
 			}
 
 			else if (Action.contains("ScrollUp")) {
@@ -664,13 +687,13 @@ public class Function extends ConnectToDataSheet {
 				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
 				int Scroll = Integer.parseInt(digit);
 
-				demoTesting.scrollUp(driver, Scroll);
+				WebScrolling.scrollUp(driver, Scroll);
 			}
 
 			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
 																		// is found
 
-				demoTesting.ScrollwebElementUntilVisible(driver, element);
+				WebScrolling.ScrollwebElementUntilVisible(driver, element);
 			}
 			
 			else if (Action.contains("ScrollwebElementUntilVisible")) { // Scrolling down the page till the webElement
@@ -679,7 +702,7 @@ public class Function extends ConnectToDataSheet {
 				String digit = getOnlyDigit(Action); // call the getdigit method to get the data
 				int Scroll = Integer.parseInt(digit);
 
-				demoTesting.ScrollUpAndDownwebElementUntilVisible(driver, PropertyValue, Scroll);
+				WebScrolling.ScrollUpAndDownwebElementUntilVisible(driver, PropertyValue, Scroll);
 			}
 			
 			
@@ -699,6 +722,8 @@ public class Function extends ConnectToDataSheet {
 				    	
 				    }
 			} 
+			
+			
 			
 			else if (Action.equalsIgnoreCase("NavigateBack")) {
 				driver.navigate().back();
@@ -860,6 +885,13 @@ public class Function extends ConnectToDataSheet {
 				}
 			}
 			
+			
+			
+			
+
+
+						
+					
 			
 			
 			
