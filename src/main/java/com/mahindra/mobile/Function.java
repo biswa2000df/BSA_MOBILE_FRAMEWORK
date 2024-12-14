@@ -45,6 +45,7 @@ public class Function extends ConnectToDataSheet {
 	public static String getText;
 	public static Actions act ;
 	public static int cpcProceedButton = 0;
+	public static boolean CPCUserQC = true;
 	
 	public static String applicationID = "MF24120700005107";
 
@@ -335,7 +336,35 @@ public class Function extends ConnectToDataSheet {
 				            .moveTo(PointOption.point(endX, endY))
 				            .release()
 				            .perform();
-			} else if(Action.equalsIgnoreCase("ScrollIntoElementIntoText")) {
+			}
+			
+			
+			else if (Action.contains("CoordinateClick")) {
+				
+				 String input = Action;//value assign to variable
+
+			        // Remove the part before '(' and after ')'
+			        String numbersPart = input.substring(input.indexOf('(') + 1, input.indexOf(')'));
+
+			        // Split the numbers into an array
+			        String[] values = numbersPart.split(",");
+
+			    	TouchAction touchAction = new TouchAction((PerformsTouchActions) driver);
+
+					// Specify the coordinates where you want to tap (x, y)
+					int x = Integer.parseInt(values[0].trim());;
+					int y = Integer.parseInt(values[1].trim());
+
+					// Perform the tap action at the specified coordinates
+					touchAction
+					    .tap(PointOption.point(x, y))
+					    .waitAction(WaitOptions.waitOptions(Duration.ofSeconds(2))) // Optional wait after tap
+					    .perform();
+			        
+			}
+			
+			
+			else if(Action.equalsIgnoreCase("ScrollIntoElementIntoText")) {
 				((AndroidDriver)driver).findElementByAndroidUIAutomator(
 					    "new UiScrollable(new UiSelector().scrollable(true)).setAsVerticalList().scrollForward()"
 					    + ".scrollIntoView(new UiSelector().description(\"" + dataSheet2Value + "\"))")
@@ -574,10 +603,10 @@ public class Function extends ConnectToDataSheet {
 
 				            if (element.isDisplayed()) {
 				            	elementIsVisible = true;
-				                if (screenHeight - elementY <= screenHeight * 0.3) {
+				                if (screenHeight - elementY <= screenHeight * 0.25) {//0.2
 				                    // Element is too close to the bottom, scroll down slightly
 				                    int scrollStartY = (int) (screenHeight * 0.6);
-				                    int scrollEndY = (int) (screenHeight * 0.5);
+				                    int scrollEndY = (int) (screenHeight * 0.55);//0.5
 
 				                    TouchAction touchAction = new TouchAction((PerformsTouchActions)driver);
 				                    touchAction.press(PointOption.point(screenWidth / 2, scrollStartY))
@@ -708,13 +737,16 @@ public class Function extends ConnectToDataSheet {
 			
 			
 			else if (Action.equalsIgnoreCase("ClickOnCPC1stTouchPointCase")) {
+				CPCUserQC = false;
 				Thread.sleep(2000);
 			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
 				System.out.println("==================================================="+Application_Elements.size());
 				  for(WebElement ele: Application_Elements) {
 				    	String applicationStage = ele.getText();
 				    	System.out.println(applicationStage);
+				    	
 				    	if(applicationStage.equalsIgnoreCase( applicationID + " - " + dataSheet2Value)) {
+				    		CPCUserQC = true;
 //				    	if(applicationStage.contains( dataSheet2Value)) {
 				    		ele.click();
 				    		break;
@@ -889,6 +921,9 @@ public class Function extends ConnectToDataSheet {
 			
 			
 
+			else if (Action.equalsIgnoreCase("ClickOnCo_Applicant")) {
+				driver.findElement(By.xpath("//android.widget.Button[contains(@content-desc,'"+ dataSheet2Value +"')]")).click();
+			}
 
 						
 					

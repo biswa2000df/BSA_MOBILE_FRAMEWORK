@@ -138,6 +138,12 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 
 						int i; // for this for-loop
 						for (i = 0; i < rowsList.size(); i++) {
+							
+							//for SFDC User 2 QC and client function
+							if(!Function.CPCUserQC) {
+								Function.CPCUserQC = true;
+								i = rowsList.size()-1;
+							}
 
 							List<Object> row = (List<Object>) rowsList.get(i);
 
@@ -255,7 +261,7 @@ public class ConnectToDataSheet extends Android_IOS_Driver {
 				utilsActivity.testcaseInfoWithDataField(); // print extent report info
 				function.ActionRDS();
 			} catch (Exception e) {
-
+				System.out.println("Sorry... U not write Module name to Sheet2");
 			}
 
 		} else {

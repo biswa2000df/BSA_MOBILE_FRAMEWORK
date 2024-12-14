@@ -30,7 +30,7 @@ public class TestingClass {
 
 //	public static void main(String[] args) {
 
-		mainControllerFilePath = System.getProperty("user.dir") + File.separator + "MainController2.xlsx";
+	/*	mainControllerFilePath = System.getProperty("user.dir") + File.separator + "MainController2.xlsx";
 		File mainControllerFile = new File(mainControllerFilePath);
 
 		try {
@@ -131,6 +131,12 @@ public class TestingClass {
 		} catch (Exception e) {
 			System.out.println("SORRY!!! 'Main_Controller.xlsx' file are not present...");
 			System.exit(0);
+		}*/
+		
+		boolean b=false;
+		
+		if(!b) {
+			System.out.println("kanha");
 		}
 
 	}
