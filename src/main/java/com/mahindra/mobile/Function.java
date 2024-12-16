@@ -47,6 +47,7 @@ public class Function extends ConnectToDataSheet {
 	public static int cpcProceedButton = 0;
 	public static boolean CPCUserQC = true;
 	static Map<String, Integer> duplicatePersonaListDetails;
+	static Map<String, Integer> LogicalUserQCduplicatePersonaListDetails;
 	
 	public static String applicationID = "MF24120700005107";
 
@@ -796,6 +797,7 @@ public class Function extends ConnectToDataSheet {
 			
 			else if (Action.equalsIgnoreCase("InitilisedDuplicatePersonaListDetails")) {
 				 duplicatePersonaListDetails = new HashMap<String, Integer>();
+				 LogicalUserQCduplicatePersonaListDetails = new HashMap<String, Integer>();
 			}
 			
 			
@@ -918,11 +920,85 @@ public class Function extends ConnectToDataSheet {
 				    	System.out.println(applicationStage);
 				    	if(applicationStage.equalsIgnoreCase( dataSheet2Value )) {
 				    		
-				    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[" + i + "]/div/button"));
+				    		LogicalUserQCduplicatePersonaListDetails.put(applicationStage, 1);
+				    		
+				    		WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[" + i + "]/div/button"));
 				    		editButton.click();
 				    		break;
 				    		
 				    	
+				    	}
+				    	
+				    }
+			}
+			
+			
+			else if (Action.equalsIgnoreCase("ClickOnEditSignForQCUser1")) {
+				
+				
+				List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+					System.out.println("Number of elements found:==================================================="+Application_Elements.size());
+					int i=0;
+					  for(WebElement ele: Application_Elements) {
+						  i++;
+					    	String applicationStage = ele.getText();
+					    	System.out.println(applicationStage);
+					    	if(applicationStage.equalsIgnoreCase( dataSheet2Value )) {
+					    		System.out.println("Map after First method: =====> " + i +" =====> "  + LogicalUserQCduplicatePersonaListDetails);
+					    	
+					    		if (LogicalUserQCduplicatePersonaListDetails.containsKey(applicationStage)) {
+					    			int value = LogicalUserQCduplicatePersonaListDetails.get(applicationStage);
+						    		
+					    			if(value == 1) {
+					    				System.out.println("INSIDE THE if BLOCK = " + i);
+					    				LogicalUserQCduplicatePersonaListDetails.put(applicationStage, 2);
+					    				continue;
+					    			}else if(value == 2){
+					    				LogicalUserQCduplicatePersonaListDetails.put(applicationStage, 1);
+								    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[" + i + "]/div/button"));
+							    		Thread.sleep(1000);
+					    				editButton.click();
+							    		break;
+					    			}
+					    			
+					    		}
+					    		
+					    	}
+					    	
+					    }
+				}
+				
+				
+		else if (Action.equalsIgnoreCase("ClickOnEditSignForQCUser2")) {	
+			
+			List<WebElement> Application_Elements = driver.findElements(By.xpath(PropertyValue));
+				System.out.println("Number of elements found:==================================================="+Application_Elements.size());
+				int i=0;
+				  for(WebElement ele: Application_Elements) {
+					  i++;
+				    	String applicationStage = ele.getText();
+				    	System.out.println(applicationStage);
+				    	if(applicationStage.equalsIgnoreCase( dataSheet2Value )) {
+				    		System.out.println("Map after second method: =====> " + i +" =====> "  + LogicalUserQCduplicatePersonaListDetails);
+				    	
+				    		if (LogicalUserQCduplicatePersonaListDetails.containsKey(applicationStage)) {
+				    			int value = LogicalUserQCduplicatePersonaListDetails.get(applicationStage);
+					    		
+				    			if(value == 1) {
+				    				LogicalUserQCduplicatePersonaListDetails.put(applicationStage, 2);
+				    				continue;
+				    			}else if(value == 2) {
+				    				LogicalUserQCduplicatePersonaListDetails.put(applicationStage, 3);
+				    				continue;
+				    			}else if(value == 3){
+							    	WebElement editButton =	driver.findElement(By.xpath("(//div[@class='slds-form-element slds-hint-parent test-id__output-root slds-form-element_edit slds-form-element_readonly slds-form-element_horizontal']/dd)[" + i + "]/div/button"));
+						    		Thread.sleep(1000);
+				    				editButton.click();
+						    		break;
+				    			}
+				    			
+				    		}
+				    		
 				    	}
 				    	
 				    }
