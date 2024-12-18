@@ -20,6 +20,8 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.google.common.collect.ImmutableMap;
+
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.HidesKeyboard;
 import io.appium.java_client.InteractsWithApps;
@@ -68,6 +70,8 @@ public class Function extends ConnectToDataSheet {
 				// start time count
 				executionStartTime = System.nanoTime();
 			}
+			
+			
 
 			else if (Action.equalsIgnoreCase("START_APPLICATION")) {
 				MobileConfiguration.mobileConfigurationSheet();
@@ -83,7 +87,7 @@ public class Function extends ConnectToDataSheet {
 			}
 			
 			else if (Action.equalsIgnoreCase("STARTBROWSER")) {
-				InitialisationWebDriverLocal();
+				Initialisation(dataSheet2Value);
 			}
 			
 			else if (Action.equalsIgnoreCase("BROWSERURL")) {
@@ -1086,7 +1090,22 @@ public class Function extends ConnectToDataSheet {
 			else if (Action.equalsIgnoreCase("SelectCo_ApplicantOrGuarantor")) {
 				driver.findElement(By.xpath("//android.widget.Button[contains(@content-desc,'"+ dataSheet2Value +"')]")).click();
 			}
-
+			
+			else if (Action.equalsIgnoreCase("DND")) {
+				
+				if (Boolean.parseBoolean(dataSheet2Value)) {
+					Process process = Runtime.getRuntime().exec("adb shell am start -a android.settings.ZEN_MODE_SETTINGS");
+					Thread.sleep(2000);
+					driver.findElement(By.xpath(PropertyValue)).click();
+					driver.navigate().back();
+				} else {
+					Process process = Runtime.getRuntime().exec("adb shell am start -a android.settings.ZEN_MODE_SETTINGS");
+					Thread.sleep(2000);
+					driver.findElement(By.xpath(PropertyValue)).click();
+					driver.navigate().back();
+				}
+				
+			}
 						
 					
 			
